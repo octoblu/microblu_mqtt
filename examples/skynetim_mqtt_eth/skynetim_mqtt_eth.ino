@@ -12,30 +12,27 @@
  * This sketch uses the MQTT library to connect to skynet. It sends a message
  * on successful connection and logs data every second.
  *
- * Works with ethernet shields compatible with EthernetClient library from
- * Arduino. If you don't know, grab the original
- * http://arduino.cc/en/Main/ArduinoWiFiShield
+ * Requires the MQTT library from Nick O'Leary http://knolleary.net/arduino-client-for-mqtt/
+ * And one modification in PubSubClient.h, increase MQTT_MAX_PACKET_SIZE from 128 to something like 256
  *
- * Remember not to mess with wifis's unavailable pins (7, 10, 11, 12, 13 and 4 if using SD card)
+ * Works with ethernet shields compatible with EthernetClient library from
+ * Arduino. If you don't know, grab the original 
+ * http://arduino.cc/en/Main/ArduinoEthernetShield
+ *
+ * Remember not to mess with ethernet's unavailable pins (10, 11, 12, 13 and 4 if using SD card)
  *
  * You will notice we're using F() in Serial.print. It is covered briefly on
  * the arduino print page but it means we can store our strings in program
  * memory instead of in ram.
  *
- * You can turn on debugging within SkynetClient.h by uncommenting
- * #define SKYNETCLIENT_DEBUG but note this takes up a ton of program space
- * which means you'll probably have to debug on a Mega
  */
- 
+
 #include <SPI.h>
-#include <WiFi.h>
+#include <Ethernet.h>
 #include <PubSubClient.h>
 
-char ssid[] = "cartel"; //  your network SSID (name)
-char pass[] = "cartelcoffee";    // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
-
-int status = WL_IDLE_STATUS;
+//you can't have 2 of the same mac on your network!
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 char server[] = "skynet.im";
 
@@ -46,7 +43,7 @@ char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 //another UUID well send a message to
 char TOUUID[] = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"; 
 
-WiFiClient client;
+EthernetClient client;
 PubSubClient skynet(server, 1883, onMessage, client);
 
 //we'll run this if anyone messages us
@@ -60,23 +57,23 @@ void onMessage(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 }
 
-void setup() {
-  //Initialize serial and wait for port to open:
+void setup()
+{
+
   Serial.begin(9600);
 
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
-    while (true);
+  // start the Ethernet connection:
+  if (Ethernet.begin(mac) == 0) {
+    Serial.println(F("Failed to configure Ethernet using DHCP"));
+    // no point in carrying on, so do nothing forevermore:
+    for(;;)
+      ;
   }
-
-  String fv = WiFi.firmwareVersion();
-  if ( fv != "1.1.0" )
-    Serial.println("Please upgrade the firmware");
+  
 }
 
-void loop() {
+void loop()
+{
   //we need to call loop for the mqtt library to do its thing and send/receive our messages
   if(skynet.loop()){
   
@@ -100,17 +97,6 @@ void loop() {
   {
     //oops we're not connected yet or we lost connection
     Serial.println(F("connecting..."));
-
-    // attempt to connect to Wifi network:
-    while (status != WL_CONNECTED) {
-      Serial.print("Attempting to connect to SSID: ");
-      Serial.println(ssid);
-      // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-      status = WiFi.begin(ssid, pass);
-  
-      // wait 10 seconds for connection:
-      delay(10000);
-    }
       
     // skynet doesnt use client so send empty client string and YOUR UUID and token
     if (skynet.connect("", UUID, TOKEN)){
