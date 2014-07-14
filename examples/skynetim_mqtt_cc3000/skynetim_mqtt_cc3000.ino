@@ -109,6 +109,17 @@ void loop() {
     //oops we're not connected yet or we lost connection
     Serial.println(F("connecting..."));
 
+    // Sadly if we don't reinit it never reconnects
+    if ( wifi.init() ) {
+      Serial.println(F("CC3000 initialization complete"));
+    } else {
+      Serial.println(F("Something went wrong during CC3000 init!"));
+      while(1);
+    }
+
+    //lets wait so we don't slam the router
+    delay(10000);
+
     // attempt to connect to Wifi network:
     if(wifi.connect(ssid, ap_security, pass, timeout)) {
 
@@ -122,7 +133,7 @@ void loop() {
         skynet.subscribe(UUID);
         
         //Lets send a message! give the destination and payload in a json object
-        //{"devices":"26ce1ac8-2133-4faa-bcb9-3548fesindex","payload":"hi!"}
+        //{"devices":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX","payload":"hi!"}
         //don't forget to escape those quotes!
         //also note the wifi shield has a character limit of like 80 so stay below that
         String messageString = "{\"devices\":\"" + String(TOUUID) + "\",\"payload\":\"hi!\"}" ;
