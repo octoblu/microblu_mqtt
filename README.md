@@ -34,7 +34,7 @@ Firmata is a common protocol that many apps are built on to control arduinos dyn
 ```bash
 curl -X POST -d "type=firmwareController&name=myController" 
 ```
-This tells Skynet to remove all skynet routing information from the packet and to only give the payload.Put that uuid and token into one of our skynetim_StandardFirmata, along with any networking information, and you've got a skynet slave device waiting for instructions.
+This tells Skynet to remove all skynet routing information from the packet and to only give the payload. Put that uuid and token into one of our skynetim_StandardFirmata examples along with any networking information, and you've got a skynet slave device waiting for instructions.
 
 ###Data API
 For a simpler example, we can also just log data in Skynet to be retreived elsewhere later using the Data api:
