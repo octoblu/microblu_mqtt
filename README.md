@@ -30,10 +30,11 @@ Skynet OS allows you to connect to Skynet.im via your Arduino and an Arduino eth
 Find full examples in the File->Examples->SkynetClient menu but generally, theres 3 ways to use: firmata, message api, data api.
 
 ###Firmata
-Firmata is a common protocol that many apps are built on to control arduinos dynamically. You only program them once and then you can toggle pins, read data, move servo and much much more.  We've tunned firmata through Skynet over mqtt so now you can control your devices wirelessly around the world.
-* First you need a UUID with its type set to firmware. This tells Skynet to just send base64 encoded data and allows you to broadcast base64 encoded data. You can control who receives it using permissions.
-*Put that uuid and token into one of our examples, along with any networking information, and you've got a skynet slave devices waiting for commands.
-See the skynetim_StandardFirmata examples.
+Firmata is a common protocol that many apps are built on to control arduinos dynamically. You only program them once and then you can toggle pins, read data, move servo and much much more.  We've tunned firmata through Skynet over mqtt so now you can control your devices wirelessly around the world. First you need a UUID with its type set to 'firmwareController' 
+```bash
+curl -X POST -d "type=firmwareController&name=myController" 
+```
+This tells Skynet to remove all skynet routing information from the packet and to only give the payload.Put that uuid and token into one of our skynetim_StandardFirmata, along with any networking information, and you've got a skynet slave device waiting for instructions.
 
 ###Data API
 For a simpler example, we can also just log data in Skynet to be retreived elsewhere later using the Data api:
