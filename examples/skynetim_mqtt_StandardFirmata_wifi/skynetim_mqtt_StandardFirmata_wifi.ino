@@ -717,7 +717,7 @@ void loop() {
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
-      Serial.print("Attempting to connect to SSID: ");
+      Serial.print(F("Attempting to connect to SSID: "));
       Serial.println(ssid);
       // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
       status = WiFi.begin(ssid, pass);
