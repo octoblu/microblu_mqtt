@@ -23,6 +23,13 @@
  *
  * Remember not to mess with cc3000's unavailable pins (11, 12, 13 and whatever you set below)
  *
+ * Sadly cc3000 is a very big library. We've had to make a few changes marked below by the
+ * initials JJR:
+ * Lowered the firmata write buffer from 150 to 90, meaning the buffer no longer has the room
+ * to support the firmata capabilty query so it was commented out.
+ * Returned error strings changed to "ERR"
+ * Other places to slim or swap include setting MAX_SERVOS to 0 or removing Serial entirely
+ *
  * You will notice we're using F() in Serial.print. It is covered briefly on
  * the arduino print page but it means we can store our strings in program
  * memory instead of in ram.
@@ -45,7 +52,7 @@
 #define CC3000_EN       7   // Can be any digital pin //Adafruit is 5
 #define CC3000_CS       10  // Preferred is pin 10 on Uno
 
-ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno
+ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno //JJR
 ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string 
 
 StreamBuffer stream(write, read);
@@ -492,36 +499,36 @@ void sysexCallback(byte command, byte argc, byte *argv)
       analogWriteCallback(argv[0], val);
     }
     break;
-  case CAPABILITY_QUERY:
-    Firmata.write(START_SYSEX);
-    Firmata.write(CAPABILITY_RESPONSE);
-    for (byte pin=0; pin < TOTAL_PINS; pin++) {
-      if (IS_PIN_DIGITAL(pin)) {
-        Firmata.write((byte)INPUT);
-        Firmata.write(1);
-        Firmata.write((byte)OUTPUT);
-        Firmata.write(1);
-      }
-      if (IS_PIN_ANALOG(pin)) {
-        Firmata.write(ANALOG);
-        Firmata.write(10);
-      }
-      if (IS_PIN_PWM(pin)) {
-        Firmata.write(PWM);
-        Firmata.write(8);
-      }
-      if (IS_PIN_SERVO(pin)) {
-        Firmata.write(SERVO);
-        Firmata.write(14);
-      }
-      if (IS_PIN_I2C(pin)) {
-        Firmata.write(I2C);
-        Firmata.write(1);  // to do: determine appropriate value 
-      }
-      Firmata.write(127);
-    }
-    Firmata.write(END_SYSEX);
-    break;
+  // case CAPABILITY_QUERY: //JJR
+  //   Firmata.write(START_SYSEX);
+  //   Firmata.write(CAPABILITY_RESPONSE);
+  //   for (byte pin=0; pin < TOTAL_PINS; pin++) {
+  //     if (IS_PIN_DIGITAL(pin)) {
+  //       Firmata.write((byte)INPUT);
+  //       Firmata.write(1);
+  //       Firmata.write((byte)OUTPUT);
+  //       Firmata.write(1);
+  //     }
+  //     if (IS_PIN_ANALOG(pin)) {
+  //       Firmata.write(ANALOG);
+  //       Firmata.write(10);
+  //     }
+  //     if (IS_PIN_PWM(pin)) {
+  //       Firmata.write(PWM);
+  //       Firmata.write(8);
+  //     }
+  //     if (IS_PIN_SERVO(pin)) {
+  //       Firmata.write(SERVO);
+  //       Firmata.write(14);
+  //     }
+  //     if (IS_PIN_I2C(pin)) {
+  //       Firmata.write(I2C);
+  //       Firmata.write(1);  // to do: determine appropriate value 
+  //     }
+  //     Firmata.write(127);
+  //   }
+  //   Firmata.write(END_SYSEX);
+  //   break;
   case PIN_STATE_QUERY:
     if (argc > 0) {
       byte pin=argv[0];
