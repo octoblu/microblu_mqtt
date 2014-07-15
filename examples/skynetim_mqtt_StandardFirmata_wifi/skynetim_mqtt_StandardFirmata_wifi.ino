@@ -10,7 +10,8 @@
  * THE INTERNET OF THINGS.
  *
  * This sketch uses the MQTT library to bridge firmata to skynet. You can then turn pins
- * off and on remotely, and much much more.
+ * off and on remotely, and much much more. To drive from Node.js and Skynet see:
+ * https://github.com/octoblu/serial/tree/master/examples/firmata/SkynetSerial
  *
  * Requires the MQTT library from Nick O'Leary http://knolleary.net/arduino-client-for-mqtt/
  *
