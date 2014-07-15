@@ -27,10 +27,35 @@ Skynet OS allows you to connect to Skynet.im via your Arduino and an Arduino eth
 * After adding, you'll find File->Examples->SkynetClient
 
 ##Examples
-Find full examples in the File->Examples->SkynetClient menu but generally, theres 3 ways to use: message api, data api, or bind.
+Find full examples in the File->Examples->SkynetClient menu but generally, theres 3 ways to use: firmata, message api, data api.
+
+###Firmata
+Firmata is a common protocol that many apps are built on to control arduinos dynamically. You only program them once and then you can toggle pins, read data, move servo and much much more.  We've tunned firmata through Skynet over mqtt so now you can control your devices wirelessly around the world.
+* First you need a UUID with its type set to firmware. This tells Skynet to just send base64 encoded data and allows you to broadcast base64 encoded data. You can control who receives it using permissions.
+*Put that uuid and token into one of our examples, along with any networking information, and you've got a skynet slave devices waiting for commands.
+See the skynetim_StandardFirmata examples.
+
+###Data Api
+For a simpler example, we can also just log data in Skynet to be retreived elsewhere later using the Data api:
+```cpp
+
+    //create a json string like "light":122
+    //don't forget to escape those quotes!
+    //here we grab whatever is hooked up to A0
+    String messageString = "{\"light\":"+ String(int(analogRead(A0))) + "}";
+    
+    //housekeeping to turn our string into a character array
+    char message[messageString.length()+1];
+    messageString.toCharArray(message, messageString.length()+1);
+  
+    //Send away! The logging endpoint is called 'data'
+    skynet.publish("data",message);
+
+```
+Now you can subscribe to your data elsewhere. See the api page for rest examples with Rest, Javascript, and more! http://skynet.im/#api
 
 ###Message api
-When you create the skynet object you register a callback function to be called when Skynet receives a message for your device:
+Finally, you might like to have your arduino communicate with other skynet client somewhere in the world. You might log data, trigger a command -- it's completely up to you. When you create the skynet object you register a callback function to be called when Skynet receives a message for your device:
 ```cpp
 //Lets send a message! give the destination and payload in a json object
 //The message endpoint is called message, don't forget to escape those quotes!
@@ -49,27 +74,6 @@ void onMessage(char* topic, byte* payload, unsigned int length) {
   Serial.println(topic);
 }
 ```
-
-###Data Api
-We can also just send data to Skynet to be retreived elsewhere later:
-```cpp
-
-    //create a json string like "light":122
-    //don't forget to escape those quotes!
-    //here we grab whatever is hooked up to A0
-    String messageString = "{\"light\":"+ String(int(analogRead(A0))) + "}";
-    
-    //housekeeping to turn our string into a character array
-    char message[messageString.length()+1];
-    messageString.toCharArray(message, messageString.length()+1);
-  
-    //Send away! The logging endpoint is called 'data'
-    skynet.publish("data",message);
-
-```
-Now you can subscribe to your data elsewhere. See the api page for rest examples with Rest, Javascript, and more! http://skynet.im/#api
-###Bind
-Coming Soon!
 
 LICENSE
 -------
