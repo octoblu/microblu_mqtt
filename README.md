@@ -35,7 +35,7 @@ Firmata is a common protocol that many apps are built on to control arduinos dyn
 *Put that uuid and token into one of our examples, along with any networking information, and you've got a skynet slave devices waiting for commands.
 See the skynetim_StandardFirmata examples.
 
-###Data Api
+###Data API
 For a simpler example, we can also just log data in Skynet to be retreived elsewhere later using the Data api:
 ```cpp
 
@@ -54,14 +54,14 @@ For a simpler example, we can also just log data in Skynet to be retreived elsew
 ```
 Now you can subscribe to your data elsewhere. See the api page for rest examples with Rest, Javascript, and more! http://skynet.im/#api
 
-###Message api
+###Message API
 Finally, you might like to have your arduino communicate with other skynet client somewhere in the world. You might log data, trigger a command -- it's completely up to you. When you create the skynet object you register a callback function to be called when Skynet receives a message for your device:
 ```cpp
 //Lets send a message! give the destination and payload in a json object
 //The message endpoint is called message, don't forget to escape those quotes!
-skynet.publish("message"," "{\"devices\":\"26ce1ac8-2133-4faa-bcb9-3548fesindex\",\"payload\":\"hi!\"}"");
+skynet.publish("message"," "{\"devices\":\"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX\",\"payload\":\"hi!\"}"");
 ```
-We can receive messages too. When we connect we subscribe to our UUID
+We can receive messages too. When we connect we subscribe to *our own* UUID
 ```cpp
 skynet.subscribe(XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX);
 ```
