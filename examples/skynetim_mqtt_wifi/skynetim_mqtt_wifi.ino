@@ -122,7 +122,7 @@ void loop() {
       skynet.subscribe(UUID);
       
       //Lets send a message! give the destination and payload in a json object
-      //{"devices":"26ce1ac8-2133-4faa-bcb9-3548fesindex","payload":"hi!"}
+      //{"devices":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX","payload":"hi!"}
       //don't forget to escape those quotes!
       //also note the wifi shield has a character limit of like 80 so stay below that
       String messageString = "{\"devices\":\"" + String(TOUUID) + "\",\"payload\":\"hi!\"}" ;
