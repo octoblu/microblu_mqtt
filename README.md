@@ -1,13 +1,17 @@
 ```
- SSSSS  kk                            tt
-SS      kk  kk yy   yy nn nnn    eee  tt
- SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt
-     SS kk kk   yyyyyy nn   nn eeeee  tt
- SSSSS  kk  kk      yy nn   nn  eeeee  tttt
-                yyyyy
+
+MM    MM iii                      bb      lll         
+MMM  MMM       cccc rr rr   oooo  bb      lll uu   uu 
+MM MM MM iii cc     rrr  r oo  oo bbbbbb  lll uu   uu 
+MM    MM iii cc     rr     oo  oo bb   bb lll uu   uu 
+MM    MM iii  ccccc rr      oooo  bbbbbb  lll  uuuu u 
+                                                      
+                                                
 ```
 
-Skynet OS allows you to connect to Skynet.im via your Arduino and an Arduino ethernet or wifi shield (or any other device that properly implements the Client interface)
+Microblu OS allows you to connect and control your Arduino via the Octoblu Meshblu (formerly SkyNet.im) open source IoT platform and API.
+
+Microblu OS supports Arduino ethernet or wifi shields (or any other device that properly implements the Client interface)
  * http://arduino.cc/en/Main/ArduinoEthernetShield
  * http://arduino.cc/en/Main/ArduinoBoardEthernet
  * http://arduino.cc/en/Main/ArduinoWiFiShield
