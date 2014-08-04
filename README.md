@@ -36,7 +36,7 @@ Find full examples in the File->Examples->SkynetClient menu but generally, there
 ###Firmata
 Firmata is a common protocol that many apps are built on to control arduinos dynamically. You only program them once and then you can toggle pins, read data, move servo and much much more.  We've tunned firmata through Skynet over mqtt so now you can control your devices wirelessly around the world. First you need a UUID with its type set to 'firmwareController' 
 ```bash
-curl -X POST -d "type=firmwareController&name=myController" 
+curl -X POST -d "type=firmwareController&name=myController" http://skynet.im/devices
 ```
 This tells Skynet to remove all skynet routing information from the packet and to only give the payload. Put that uuid and token into one of our skynetim_StandardFirmata examples along with any networking information, and you've got a skynet slave device waiting for instructions.
 
