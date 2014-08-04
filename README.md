@@ -24,11 +24,15 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
 * https://www.youtube.com/watch?v=ZJNlqZXbrbM
 
 ##Install
-* Clone or download and unzip.
-* Also requires the MQTT library from Nick O'Leary http://knolleary.net/arduino-client-for-mqtt/
-* Rename the resulting folder to remove any - characters, and import library via Arduino menu Sketch->Import Library->Add Library
-* And make one modification to MQTT PubSubClient.h Edit to increase MQTT_MAX_PACKET_SIZE from 128 to something like 256
-* After adding, you'll find File->Examples->SkynetClient
+You'll need this repo. 
+* Find the Download Zip button on the right ->
+* Rename the resulting folder to remove any invalid characters like - , and import the main folder via Arduino menu Sketch->Import Library->Add Library
+
+You'll also need our fork of the MQTT PubSubClient Library
+* Go to https://github.com/jacobrosenthal/pubsubclient and find the Download Zip button on the right.
+* Import the PubSubClient sub folder via Arduino menu Sketch->Import Library->Add Library
+
+Now you'll find File->Examples->SkynetClient
 
 ##Examples
 Find full examples in the File->Examples->SkynetClient menu but generally, theres 3 ways to use: firmata, message api, data api.
