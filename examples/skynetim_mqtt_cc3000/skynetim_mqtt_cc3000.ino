@@ -12,8 +12,9 @@
  * This sketch uses the MQTT library to connect to skynet. It sends a message
  * on successful connection and logs data every second.
  *
- * Requires the MQTT library from Nick O'Leary http://knolleary.net/arduino-client-for-mqtt/
- * And one modification in PubSubClient.h, increase MQTT_MAX_PACKET_SIZE from 128 to something like 256
+ * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
+ * You can receive larger skynet messages by increasing MQTT_MAX_PACKET_SIZE in 
+ * PubSubClient.h from 128 to something like 256
  *
  * Should work with any cc3000 shield or breakout like Adafruit or Sparkfun:
  * https://www.sparkfun.com/products/12071

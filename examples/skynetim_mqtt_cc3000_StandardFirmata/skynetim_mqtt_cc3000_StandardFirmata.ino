@@ -13,7 +13,7 @@
  * off and on remotely, and much much more. To drive from Node.js and Skynet see:
  * https://github.com/octoblu/serial/tree/master/examples/firmata/SkynetSerial
  *
- * Requires the MQTT library from Nick O'Leary http://knolleary.net/arduino-client-for-mqtt/
+ * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
  *
  * Should work with any cc3000 shield or breakout like Adafruit or Sparkfun:
  * https://www.sparkfun.com/products/12071
