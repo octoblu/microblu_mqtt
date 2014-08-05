@@ -1,16 +1,6 @@
 /*
- *                SSSSS  kk                            tt
- *               SS      kk  kk yy   yy nn nnn    eee  tt
- *                SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt
- *                    SS kk kk   yyyyyy nn   nn eeeee  tt
- *                SSSSS  kk  kk      yy nn   nn  eeeee  tttt
- *                               yyyyy
- *
- * SkynetClient for http://skynet.im, OPEN COMMUNICATIONS NETWORK & API FOR
- * THE INTERNET OF THINGS.
- *
- * This sketch uses the MQTT library to bridge firmata to skynet. You can then turn pins
- * off and on remotely, and much much more. To drive from Node.js and Skynet see:
+ * This sketch uses the MQTT library to bridge firmata to Octoblu. You can then turn pins
+ * off and on remotely, and much much more. To drive from Node.js and Octoblu see:
  * https://github.com/octoblu/serial/tree/master/examples/firmata/SkynetSerial
  *
  * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
@@ -18,8 +8,9 @@
  * Should work with any cc3000 shield or breakout like Adafruit or Sparkfun:
  * https://www.sparkfun.com/products/12071
  *
- * However no matter which you choose, we have a requirement on the Sparkfun
- * library: https://github.com/sparkfun/SFE_CC3000_Library/
+ * However no matter which you choose, the only driver we know of that properly implements the
+ * Arduino client library is Sparkfun's so utilize their library:
+ * https://github.com/sparkfun/SFE_CC3000_Library/
  *
  * Remember not to mess with cc3000's unavailable pins (11, 12, 13 and whatever you set below)
  *

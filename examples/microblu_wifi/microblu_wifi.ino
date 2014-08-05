@@ -1,16 +1,6 @@
 /*
- *                SSSSS  kk                            tt
- *               SS      kk  kk yy   yy nn nnn    eee  tt
- *                SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt
- *                    SS kk kk   yyyyyy nn   nn eeeee  tt
- *                SSSSS  kk  kk      yy nn   nn  eeeee  tttt
- *                               yyyyy
- *
- * SkynetClient for http://skynet.im, OPEN COMMUNICATIONS NETWORK & API FOR
- * THE INTERNET OF THINGS.
- *
- * This sketch uses the MQTT library to bridge firmata to skynet. You can then turn pins
- * off and on remotely, and much much more. To drive from Node.js and Skynet see:
+ * This sketch uses the MQTT library to bridge firmata to Octoblu. You can then turn pins
+ * off and on remotely, and much much more. To drive from Node.js and Octoblu see:
  * https://github.com/octoblu/serial/tree/master/examples/firmata/SkynetSerial
  *
  * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
