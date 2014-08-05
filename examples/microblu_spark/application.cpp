@@ -264,7 +264,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes) {
   // do not always require the register read so upon interrupt you call Wire.requestFrom()  
   if (theRegister != REGISTER_NOT_SPECIFIED) {
     Wire.beginTransmission(address);
-    #if ARDUINO <= 100
+    #if ARDUINO >= 100 || SPARK
     Wire.write((byte)theRegister);
     #else
     Wire.send((byte)theRegister);
@@ -286,8 +286,8 @@ void readAndReportData(byte address, int theRegister, byte numBytes) {
     i2cRxData[0] = address;
     i2cRxData[1] = theRegister;
     for (int i = 0; i < numBytes; i++) {
-      #if ARDUINO <= 100
-      i2cRxData[2 + i] = Wire.read();
+      #if ARDUINO >= 100 || SPARK
+      i2cRxData[2 + i] = Wire.read();      
       #else
       i2cRxData[2 + i] = Wire.receive();
       #endif
@@ -348,10 +348,6 @@ void checkDigitalInputs(void)
  */
 void setPinModeCallback(byte pin, int mode)
 {
-
-  Serial.print("pinmode");
-  Serial.println(pin);
-  Serial.println(mode);
 
   if (pinConfig[pin] == I2C && isI2CEnabled && mode != I2C) {
     // disable i2c so pins can be used for other functions
@@ -525,7 +521,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       Wire.beginTransmission(slaveAddress);
       for (byte i = 2; i < argc; i += 2) {
         data = argv[i] + (argv[i + 1] << 7);
-        #if ARDUINO <= 100
+        #if ARDUINO >= 100 || SPARK
         Wire.write(data);
         #else
         Wire.send(data);
