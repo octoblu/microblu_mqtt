@@ -33,6 +33,9 @@ ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 stri
 StreamBuffer stream(write, read);
 StreamBuffer externalaccess(read, write);
 
+// Set the static IP address to use if the DHCP fails to assign
+IPAddress ip(192, 168, 0, 177);
+
 //you can't have 2 of the same mac on your network!
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
@@ -623,9 +626,8 @@ void setup()
   // start the Ethernet connection:
   if (Ethernet.begin(mac) == 0) {
     Serial.println(F("Failed to configure Ethernet using DHCP"));
-    // no point in carrying on, so do nothing forevermore:
-    for(;;)
-      ;
+    // try to congifure using IP address instead of DHCP:
+    Ethernet.begin(mac, ip);
   }
   
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
