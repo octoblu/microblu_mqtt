@@ -74,7 +74,7 @@ Open microblu_eth example at File->Examples->microblu_mqtt.
 
 Add your UUID and TOKEN from before.
 
-It might be wise to alter the stock MAC address. If you ever have 2 of these on teh same network you'll have trouble otherwise.
+It might be wise to alter the stock MAC address. If you ever have two of these on the same network you'll have trouble otherwise.
 
 Upload away. You can open the Arduino Serial Terminal at 9600 to see your connection status.
 
