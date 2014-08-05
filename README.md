@@ -32,7 +32,7 @@ You'll also need our fork of the MQTT PubSubClient Library
 * Go to https://github.com/jacobrosenthal/pubsubclient and find the Download Zip button on the right.
 * Import the PubSubClient sub folder via Arduino menu Sketch->Import Library->Add Library
 
-Open one of the microblu examples at File->Examples->Octoblu. You'll find examples for many different boards including cc3000, Spark, Arduino Ethernet and Wifi. Some of these may require you to install your manufacturer's library as well. See the example file.
+Open one of the microblu examples at File->Examples->microblu_mqtt. You'll find examples for many different boards including cc3000, Spark, Arduino Ethernet and Wifi. Some of these may require you to install your manufacturer's library as well. See the example file.
 
 Next you need a valid UUID and Token from Skynet. Copy and paste the following into a terminal window, and put the resulting UUID and TOKEN in your sketch.
 
