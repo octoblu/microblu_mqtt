@@ -42,6 +42,8 @@ curl -X POST -d "type=firmwareController&name=Arduino" http://skynet.im/devices
 
 Last don't forget to change out your wifi or other networking credentials. Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
 
+Now you can use [Nodeblu Designer](http://app.octoblu.com/design "Nodeblu") or [Node.js](https://www.npmjs.org/package/skynet-serial "Node.js") to command and control your Arduino.
+
 
 LICENSE
 -------
