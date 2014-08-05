@@ -38,12 +38,12 @@ You'll need this repo.
 You'll also need our fork of the MQTT PubSubClient Library
 * Go to https://github.com/jacobrosenthal/pubsubclient and find the Download Zip button on the right.
 * Unarchive the folder
-* In Arduino go to Sketch->Import Library->Add Library and choose the ===PubSubClient SUB FOLDER===
+* In Arduino go to Sketch->Import Library->Add Library and choose the *****PubSubClient SUB FOLDER****
 
 ###Install Wifi 
 
 These are instructions for Arduino brand wifi
-http://arduino.cc/en/Main/ArduinoWiFiShield
+* http://arduino.cc/en/Main/ArduinoWiFiShield
 
 The first thing you should do is see if your shield and network work by using the standard wifi test at
 File->Examples->WIFI->WiFiWebClient. 
@@ -67,8 +67,8 @@ As we go forward remember NOT to mess with wifi's pins (7, 10, 11, 12, 13 and 4 
 ###Install Ethernet 
 
 These are instructions for Arduino brand ethernet shields and boards
-http://arduino.cc/en/Main/ArduinoEthernetShield
-http://arduino.cc/en/Main/ArduinoBoardEthernet
+* http://arduino.cc/en/Main/ArduinoEthernetShield
+* http://arduino.cc/en/Main/ArduinoBoardEthernet
 
 Open microblu_eth example at File->Examples->microblu_mqtt.
 
@@ -82,11 +82,11 @@ As we go forward, remember NOT to mess with ethernet's unavailable pins (10, 11,
 
 ###Install CC3000 
 
-These are instructions for any board using a CC3000 chip regardless of manufacturer. We like Sparkfun:
-https://www.sparkfun.com/products/12071
+These are instructions for any board using a CC3000 chip regardless of manufacturer. We prefer Sparkfun:
+* https://www.sparkfun.com/products/12071
+* http://www.adafruit.com/products/1491
 
-However no matter which shield you have, the only driver we know of that properly implements the
-Arduino client library is Sparkfun's so donwnload and install their library as before
+The only library we know of that properly implements the Arduino client library is Sparkfun's so matter which shield you have, donwnload and install their library as before:
 https://github.com/sparkfun/SFE_CC3000_Library/
 
 The first thing you should do is see if your shield and network work by using the standard wifi test at
