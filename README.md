@@ -114,6 +114,20 @@ As we go forward, remember NOT not to mess with cc3000's unavailable pins (11, 1
 
 One note about the cc3000 is it is a VERY big library. We've had to make a few changes. The sketch no longer supports capabilty query. Most likely that doesn't mean anything to you so don't worry about it.
 
+###Install Spark 
+
+These are instructions for a Spark Core:
+* https://www.spark.io
+
+The Spark does NOT uitlize arduino. Follow the instructions on their site to custom build:
+https://github.com/spark/core-firmware
+
+Once you can successfully custom build, you need to dump all the cpp files from this library and the MQTT library in /src and all the h files in /inc. Replace application.cpp with this file
+
+Add your UUID and TOKEN from before.
+
+Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
+
 
 ##USE
 
