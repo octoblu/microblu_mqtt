@@ -4,6 +4,7 @@
  * https://github.com/octoblu/serial/tree/master/examples/firmata/SkynetSerial
  *
  * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
+ * and our fork of firmata https://github.com/jacobrosenthal/arduino/tree/Spark
  *
  * Works with Spark Core
  * https://www.spark.io/

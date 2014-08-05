@@ -122,7 +122,11 @@ These are instructions for a Spark Core:
 The Spark does NOT uitlize arduino. Follow the instructions on their site to custom build:
 https://github.com/spark/core-firmware
 
-Once you can successfully custom build, you need to dump all the cpp files from this library and the MQTT library in /src and all the h files in /inc. Replace application.cpp with this file
+Also requires our fork of firmata https://github.com/jacobrosenthal/arduino/tree/Spark
+
+And Teensy's pgmspace.h https://github.com/jacobrosenthal/core-firmware/blob/skynet-mqtt-firmata/inc/pgmspace.h
+
+Once you can successfully custom build, you need to dump all the cpp files in /src and all the h files in /inc. Replace application.cpp with this file
 
 Add your UUID and TOKEN from before.
 
