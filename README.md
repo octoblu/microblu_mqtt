@@ -28,7 +28,7 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
 First you need a valid UUID and Token from Skynet. Copy and paste the following into a terminal window, and put the resulting UUID and TOKEN in your sketch.
 
 ```bash
-curl -X POST -d "type=firmwareController&name=Arduino" http://skynet.im/devices
+curl -X POST -d "type=firmware&name=Arduino" http://skynet.im/devices
 ```
 You'll need this repo. 
 * Find the Download Zip button on the right ->
