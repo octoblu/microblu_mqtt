@@ -119,7 +119,10 @@ One note about the cc3000 is it is a VERY big library. We've had to make a few c
 These are instructions for a Spark Core:
 * https://www.spark.io
 
-The Spark does NOT uitlize arduino. Follow the instructions on their site to custom build:
+The Spark does NOT uitlize Arduino. Unless you're an advanced user this is very difficult until we can get all the libraries we need in the Spark online IDE. Follow the directions below, but you can also see a working example in our experimental branch at:
+https://github.com/jacobrosenthal/core-firmware/tree/skynet-mqtt-firmata
+
+Follow the instructions on their site to custom build:
 https://github.com/spark/core-firmware
 
 Also requires our fork of firmata https://github.com/jacobrosenthal/arduino/tree/Spark
