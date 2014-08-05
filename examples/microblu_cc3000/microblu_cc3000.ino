@@ -56,13 +56,13 @@ unsigned int timeout = 30000;             // Milliseconds
 
 char server[] = "meshblu.octoblu.com";
 
-//Your 'firmware' type UUID and token for skynet.im TODO where to get one
+//Your 'firmware' type UUID and token for Microblu //TODO where to get one
 char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
 char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 SFE_CC3000 wifi = SFE_CC3000(CC3000_INT, CC3000_EN, CC3000_CS);
 SFE_CC3000_Client client = SFE_CC3000_Client(wifi);
-PubSubClient skynet(server, 1883, onMessage, client);
+PubSubClient microblu(server, 1883, onMessage, client);
 
 // move the following defines to Firmata.h?
 #define I2C_WRITE B00000000
@@ -664,7 +664,7 @@ void setup()
 
 void loop() {
   //we need to call loop for the mqtt library to do its thing and send/receive our messages
-  if(skynet.loop()){
+  if(microblu.loop()){
 
     byte pin, analogPin;
     
@@ -707,7 +707,7 @@ void loop() {
       //wifi has a buffer limit ~90, want around 80, so ~51 before encoding
       int len = b64::encodeLength(externalaccess.available() > 51 ? 51 : externalaccess.available());
       
-      skynet.publishHeader("tb", len, false);
+      microblu.publishHeader("tb", len, false);
         
       b64::encode(externalaccess, client, len);
             
@@ -732,14 +732,14 @@ void loop() {
     // attempt to connect to Wifi network:
     if(wifi.connect(ssid, ap_security, pass, timeout)) {
 
-      // skynet doesnt use client so send empty client string and YOUR UUID and token
-      if (skynet.connect("", UUID, TOKEN)){
+      // Octoblu doesnt use client so send empty client string and YOUR UUID and token
+      if (microblu.connect("", UUID, TOKEN)){
   
         //success!
         Serial.println(F("connected"));
   
         //you need to subscribe to your uuid to get messages for you
-        skynet.subscribe(UUID);
+        microblu.subscribe(UUID);
         
       }
       
