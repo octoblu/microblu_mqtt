@@ -54,7 +54,7 @@ char pass[] = "yourpassword";  // your WPA network password
 unsigned int ap_security = WLAN_SEC_WPA2; // Security of network
 unsigned int timeout = 30000;             // Milliseconds
 
-char server[] = "skynet.im";
+char server[] = "meshblu.octoblu.com";
 
 //Your 'firmware' type UUID and token for skynet.im TODO where to get one
 char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
@@ -622,14 +622,14 @@ void systemResetCallback()
 //we'll run this if anyone messages us
 void onMessage(char* topic, byte* payload, unsigned int length) {
 
-//  // handle incoming messages, well just print it for now
-//  Serial.println(topic);
-//  for(int i =0; i<length; i++){
-//    Serial.print((char)payload[i]);
-//  }    
-//  Serial.println();
+ // handle incoming messages, well just print it for now
+ Serial.println(topic);
+ for(int i =0; i<length; i++){
+   Serial.print((char)payload[i]);
+ }    
+ Serial.println();
 
-  b64::decode((char*)payload, length, externalaccess);
+ b64::decode((char*)payload, length, externalaccess);
 
 }
 

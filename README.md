@@ -23,24 +23,99 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
 * https://www.youtube.com/watch?v=oQzWKPER_ic
 * https://www.youtube.com/watch?v=ZJNlqZXbrbM
 
-##Install
-You'll need this repo. 
-* Find the Download Zip button on the right ->
-* Rename the resulting folder to remove any invalid characters like - , and import the main folder via Arduino menu Sketch->Import Library->Add Library
+##Install 
 
-You'll also need our fork of the MQTT PubSubClient Library
-* Go to https://github.com/jacobrosenthal/pubsubclient and find the Download Zip button on the right.
-* Import the PubSubClient sub folder via Arduino menu Sketch->Import Library->Add Library
-
-Open one of the microblu examples at File->Examples->microblu_mqtt. You'll find examples for many different boards including cc3000, Spark, Arduino Ethernet and Wifi. Some of these may require you to install your manufacturer's library as well. See the example file.
-
-Next you need a valid UUID and Token from Skynet. Copy and paste the following into a terminal window, and put the resulting UUID and TOKEN in your sketch.
+First you need a valid UUID and Token from Skynet. Copy and paste the following into a terminal window, and put the resulting UUID and TOKEN in your sketch.
 
 ```bash
 curl -X POST -d "type=firmwareController&name=Arduino" http://skynet.im/devices
 ```
+You'll need this repo. 
+* Find the Download Zip button on the right ->
+* Unarchive and rename the resulting folder to remove any invalid characters like -
+* In Arduino go to Sketch->Import Library->Add Library and choose the main folder you renamed
 
-Last don't forget to change out your wifi or other networking credentials. Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
+You'll also need our fork of the MQTT PubSubClient Library
+* Go to https://github.com/jacobrosenthal/pubsubclient and find the Download Zip button on the right.
+* Unarchive the folder
+* In Arduino go to Sketch->Import Library->Add Library and choose the ===PubSubClient SUB FOLDER===
+
+###Install Wifi 
+
+These are instructions for Arduino brand wifi
+http://arduino.cc/en/Main/ArduinoWiFiShield
+
+The first thing you should do is see if your shield and network work by using the standard wifi test at
+File->Examples->WIFI->WiFiWebClient. 
+
+Put your connection details in and make sure it gets a connection to google that looks like this:
+https://gist.github.com/jacobrosenthal/1dc81eef411392f1de71
+
+If you've never updated your Wifi shields firmware, you'll see a message to update your firmware. Please do:
+http://arduino.cc/en/Hacking/WiFiShieldFirmwareUpgrading
+
+Now you can open microblu_wifi example at File->Examples->microblu_mqtt.
+
+Add your UUID and TOKEN from before.
+
+Last don't forget to change out your wifi or other networking credentials here too. 
+
+Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
+
+As we go forward remember NOT to mess with wifi's pins (7, 10, 11, 12, 13 and 4 if using SD card)
+
+###Install Ethernet 
+
+These are instructions for Arduino brand ethernet shields and boards
+http://arduino.cc/en/Main/ArduinoEthernetShield
+http://arduino.cc/en/Main/ArduinoBoardEthernet
+
+Open microblu_eth example at File->Examples->microblu_mqtt.
+
+Add your UUID and TOKEN from before.
+
+It might be wise to alter the stock MAC address. If you ever have 2 of these on teh same network you'll have trouble otherwise.
+
+Upload away. You can open the Arduino Serial Terminal at 9600 to see your connection status.
+
+As we go forward, remember NOT to mess with ethernet's unavailable pins (10, 11, 12, 13 and 4 if using SD card)
+
+###Install CC3000 
+
+These are instructions for any board using a CC3000 chip regardless of manufacturer. We like Sparkfun:
+https://www.sparkfun.com/products/12071
+
+However no matter which shield you have, the only driver we know of that properly implements the
+Arduino client library is Sparkfun's so donwnload and install their library as before
+https://github.com/sparkfun/SFE_CC3000_Library/
+
+The first thing you should do is see if your shield and network work by using the standard wifi test at
+File->Examples->SFE_CC3000_Library->PingTest. 
+
+Put your connection details. You'll also have to change the pins to match whatever shield you have. The default pin setup is for sparkfun. If you hava adafruit you might use:
+```
+#define CC3000_INT      3   // Needs to be an interrupt pin (D2/D3)
+#define CC3000_EN       5   // Can be any digital pin
+#define CC3000_CS       10  // Preferred is pin 10 on Uno
+```
+
+And make sure it gets a connection to sparkfun that looks like this:
+XXX
+
+It it does, we're all good. Open microblu_cc3000 example at File->Examples->microblu_mqtt.
+
+Add your UUID and TOKEN from before.
+
+Don't forget to change out your pins and wifi or other networking credentials here too. 
+
+Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
+
+As we go forward, remember NOT not to mess with cc3000's unavailable pins (11, 12, 13 and whatever you set above)
+
+One note about the cc3000 is it is a VERY big library. We've had to make a few changes. The sketch no longer supports capabilty query. Most likely that doesn't mean anything to you so don't worry about it.
+
+
+##USE
 
 Now you can use [Nodeblu Designer](http://app.octoblu.com/design "Nodeblu") or [Node.js](https://www.npmjs.org/package/skynet-serial "Node.js") to command and control your Arduino.
 

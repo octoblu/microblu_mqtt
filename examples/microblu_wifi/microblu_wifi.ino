@@ -9,7 +9,7 @@
  * Arduino. If you don't know, grab the original
  * http://arduino.cc/en/Main/ArduinoWiFiShield
  *
- * Remember not to mess with ethernet's unavailable pins (7, 10, 11, 12, 13 and 4 if using SD card)
+ * Remember not to mess with wifi's unavailable pins (7, 10, 11, 12, 13 and 4 if using SD card)
  *
  * You will notice we're using F() in Serial.print. It is covered briefly on
  * the arduino print page but it means we can store our strings in program
@@ -39,7 +39,7 @@ int keyIndex = 0;            // your network key Index number (needed only for W
 
 int status = WL_IDLE_STATUS;
 
-char server[] = "skynet.im";
+char server[] = "meshblu.octoblu.com";
 
 //Your 'firmware' type UUID and token for skynet.im TODO where to get one
 char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
@@ -606,14 +606,14 @@ void systemResetCallback()
 //we'll run this if anyone messages us
 void onMessage(char* topic, byte* payload, unsigned int length) {
 
-//  // handle incoming messages, well just print it for now
-//  Serial.println(topic);
-//  for(int i =0; i<length; i++){
-//    Serial.print((char)payload[i]);
-//  }    
-//  Serial.println();
+ // handle incoming messages, well just print it for now
+ Serial.println(topic);
+ for(int i =0; i<length; i++){
+   Serial.print((char)payload[i]);
+ }    
+ Serial.println();
 
-  b64::decode((char*)payload, length, externalaccess);
+ b64::decode((char*)payload, length, externalaccess);
 
 }
 

@@ -36,7 +36,7 @@ StreamBuffer externalaccess(read, write);
 //you can't have 2 of the same mac on your network!
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-char server[] = "skynet.im";
+char server[] = "meshblu.octoblu.com";
 
 //Your 'firmware' type UUID and token for skynet.im TODO where to get one
 char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
@@ -603,14 +603,14 @@ void systemResetCallback()
 //we'll run this if anyone messages us
 void onMessage(char* topic, byte* payload, unsigned int length) {
 
-//  // handle incoming messages, well just print it for now
-//  Serial.println(topic);
-//  for(int i =0; i<length; i++){
-//    Serial.print((char)payload[i]);
-//  }    
-//  Serial.println();
+ // handle incoming messages, well just print it for now
+ Serial.println(topic);
+ for(int i =0; i<length; i++){
+   Serial.print((char)payload[i]);
+ }    
+ Serial.println();
 
-  b64::decode((char*)payload, length, externalaccess);
+ b64::decode((char*)payload, length, externalaccess);
 
 }
 
