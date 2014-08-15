@@ -64,6 +64,8 @@ Save this sketch and move on to the corresponding tutorial!
 These are instructions for Arduino brand wifi
 * http://arduino.cc/en/Main/ArduinoWiFiShield
 
+IMPORTANT: Connect the IOREF pin to the 3.3v pin. If you’re using the Rev3 series Arduino controller, you don’t need to do this!
+
 ###Step 1 - Test your WIFI shield
 
 Open the sketch:
@@ -75,6 +77,7 @@ Put your connection details in and make sure it gets a connection to google that
 ####Firmware Update
 If you've never updated your Wifi shields firmware, you'll see a message to update your firmware. Please do:
 * http://arduino.cc/en/Hacking/WiFiShieldFirmwareUpgrading
+* For Windows http://www.dfrobot.com/community/how-to-upgrade-arduino-wifi-shield-firmware-on-windows.html#comment-9233
 
 ###Step 2 - check configuration
 
