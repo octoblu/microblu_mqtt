@@ -25,7 +25,7 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
 
 ##Getting Started with Arduino
 
-To use microblu you will need to installed the Arduino IDE and some required libraries.
+To use microblu you will need to install the Arduino IDE and some required libraries.
 
 Required Downloads:
 * [Arduino IDE](http://arduino.cc/en/Main/Software)
