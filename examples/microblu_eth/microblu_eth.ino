@@ -706,8 +706,12 @@ void loop()
     //oops we're not connected yet or we lost connection
     Serial.println(F("connecting..."));
       
-    // Octoblu doesnt use client so send empty client string and YOUR UUID and token
-    if (microblu.connect("", UUID, TOKEN)){
+    String clientIdStr = "microblu_" + String(random(500000)) + "_" + String(random(500000));
+    int clientId_len = clientIdStr.length() + 1;
+    char clientId[clientId_len];
+    clientIdStr.toCharArray(clientId, clientId_len);    
+
+    if (microblu.connect(clientId, UUID, TOKEN)){
 
       //success!
       Serial.println(F("connected"));
