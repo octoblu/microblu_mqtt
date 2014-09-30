@@ -28,22 +28,23 @@
 #include <Firmata.h>
 
 ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno
-ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string 
+ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string
 
 StreamBuffer stream(write, read);
 StreamBuffer externalaccess(read, write);
 
-char ssid[] = "yournetworkname";     //  your network SSID (name)
-char pass[] = "yourpassword";  // your WPA network password
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
+char ssid[] = "OB-HQ"; //  your network SSID (name)
+char pass[] = "0ct0b1u2014";    // your WPA network password
+int keyIndex = 0;              // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 
 char server[] = "meshblu.octoblu.com";
+// char server[] = "192.168.200.35";
 
 //Your 'firmware' type UUID and token for Octoblu //TODO where to get one
-char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+char UUID[]  = "d870d511-1c42-11e4-861d-89322229e557";
+char TOKEN[] = "036lco5cu9haxajorciqfdv7sx3fecdi";
 
 WiFiClient client;
 PubSubClient microblu(server, 1883, onMessage, client);
@@ -61,6 +62,8 @@ PubSubClient microblu(server, 1883, onMessage, client);
 
 #define REGISTER_NOT_SPECIFIED -1
 
+#define PRINTF Serial.print;
+#define PRINTFLN Serial.println;
 /*==============================================================================
  * GLOBAL VARIABLES
  *============================================================================*/
@@ -106,7 +109,7 @@ Servo servos[MAX_SERVOS];
 void readAndReportData(byte address, int theRegister, byte numBytes) {
   // allow I2C requests that don't require a register read
   // for example, some devices using an interrupt pin to signify new data available
-  // do not always require the register read so upon interrupt you call Wire.requestFrom()  
+  // do not always require the register read so upon interrupt you call Wire.requestFrom()
   if (theRegister != REGISTER_NOT_SPECIFIED) {
     Wire.beginTransmission(address);
     #if ARDUINO >= 100
@@ -142,7 +145,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes) {
     if(numBytes > Wire.available()) {
       Firmata.sendString("I2C Read Error: Too many bytes received");
     } else {
-      Firmata.sendString("I2C Read Error: Too few bytes received"); 
+      Firmata.sendString("I2C Read Error: Too few bytes received");
     }
   }
 
@@ -347,8 +350,8 @@ void sysexCallback(byte command, byte argc, byte *argv)
   byte slaveAddress;
   byte slaveRegister;
   byte data;
-  unsigned int delayTime; 
-  
+  unsigned int delayTime;
+
   switch(command) {
   case I2C_REQUEST:
     mode = argv[1] & I2C_READ_WRITE_MODE_MASK;
@@ -399,11 +402,11 @@ void sysexCallback(byte command, byte argc, byte *argv)
       query[queryIndex].bytes = argv[4] + (argv[5] << 7);
       break;
     case I2C_STOP_READING:
-    byte queryIndexToSkip;      
+    byte queryIndexToSkip;
       // if read continuous mode is enabled for only 1 i2c device, disable
       // read continuous reporting for that device
       if (queryIndex <= 0) {
-        queryIndex = -1;        
+        queryIndex = -1;
       } else {
         // if read continuous mode is enabled for multiple devices,
         // determine which device to stop reading and remove it's data from
@@ -414,12 +417,12 @@ void sysexCallback(byte command, byte argc, byte *argv)
             break;
           }
         }
-        
+
         for (byte i = queryIndexToSkip; i<queryIndex + 1; i++) {
           if (i < MAX_QUERIES) {
             query[i].addr = query[i+1].addr;
             query[i].reg = query[i+1].addr;
-            query[i].bytes = query[i+1].bytes; 
+            query[i].bytes = query[i+1].bytes;
           }
         }
         queryIndex--;
@@ -439,7 +442,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
     if (!isI2CEnabled) {
       enableI2CPins();
     }
-    
+
     break;
   case SERVO_CONFIG:
     if(argc > 4) {
@@ -461,7 +464,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       samplingInterval = argv[0] + (argv[1] << 7);
       if (samplingInterval < MINIMUM_SAMPLING_INTERVAL) {
         samplingInterval = MINIMUM_SAMPLING_INTERVAL;
-      }      
+      }
     } else {
       //Firmata.sendString("Not enough data");
     }
@@ -498,7 +501,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       if (IS_PIN_I2C(pin)) {
         Firmata.write(I2C);
-        Firmata.write(1);  // to do: determine appropriate value 
+        Firmata.write(1);  // to do: determine appropriate value
       }
       Firmata.write(127);
     }
@@ -533,17 +536,17 @@ void sysexCallback(byte command, byte argc, byte *argv)
 void enableI2CPins()
 {
   byte i;
-  // is there a faster way to do this? would probaby require importing 
+  // is there a faster way to do this? would probaby require importing
   // Arduino.h to get SCL and SDA pins
   for (i=0; i < TOTAL_PINS; i++) {
     if(IS_PIN_I2C(i)) {
       // mark pins as i2c so they are ignore in non i2c data requests
       setPinModeCallback(i, I2C);
-    } 
+    }
   }
-   
-  isI2CEnabled = true; 
-  
+
+  isI2CEnabled = true;
+
   // is there enough time before the first I2C request to call this here?
   Wire.begin();
 }
@@ -576,7 +579,7 @@ void systemResetCallback()
   // pins with analog capability default to analog input
   // otherwise, pins default to digital output
   for (byte i=0; i < TOTAL_PINS; i++) {
-    
+
     // skip SPI pins for Ethernet/Wifi Shield //JJR
     if ( (i==4) || (i==7) || (i==MOSI) || (i==MISO) || (i==SCK) || (i==SS) )
       continue;
@@ -610,7 +613,7 @@ void onMessage(char* topic, byte* payload, unsigned int length) {
  Serial.println(topic);
  for(int i =0; i<length; i++){
    Serial.print((char)payload[i]);
- }    
+ }
  Serial.println();
 
  b64::decode((char*)payload, length, externalaccess);
@@ -633,7 +636,7 @@ void setup()
   String fv = WiFi.firmwareVersion();
   if ( fv != "1.1.0" )
     Serial.println(F("Please upgrade the firmware"));
-  
+
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -646,7 +649,7 @@ void setup()
 
   Firmata.begin(stream);
   systemResetCallback();  // reset to default config
-  
+
 }
 
 void loop() {
@@ -654,20 +657,20 @@ void loop() {
   if(microblu.loop()){
 
     byte pin, analogPin;
-    
+
     /* DIGITALREAD - as fast as possible, check for changes and output them to the
      * FTDI buffer using Serial.print()  */
-    checkDigitalInputs();  
-    
+    checkDigitalInputs();
+
     /* SERIALREAD - processing incoming messagse as soon as possible, while still
      * checking digital inputs.  */
     while(Firmata.available())
       Firmata.processInput();
-    
+
     /* SEND FTDI WRITE BUFFER - make sure that the FTDI buffer doesn't go over
      * 60 bytes. use a timer to sending an event character every 4 ms to
      * trigger the buffer to dump. */
-    
+
     currentMillis = millis();
     if (currentMillis - previousMillis > samplingInterval) {
       previousMillis += samplingInterval;
@@ -687,19 +690,19 @@ void loop() {
         }
       }
     }
-  
+
     //see if firmata left us any goodies
     while(externalaccess.available()){
 
       //wifi has a buffer limit ~90, want around 80, so ~51 before encoding
       int len = b64::encodeLength(externalaccess.available() > 51 ? 51 : externalaccess.available());
-      
+
       microblu.publishHeader("tb", len, false);
-        
+
       b64::encode(externalaccess, client, len);
-            
+
     }
-    
+
   }else
   {
     //oops we're not connected yet or we lost connection
@@ -711,15 +714,15 @@ void loop() {
       Serial.println(ssid);
       // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
       status = WiFi.begin(ssid, pass);
-  
+
       // wait 10 seconds for connection:
       delay(10000);
     }
-      
+
     String clientIdStr = "microblu_" + String(random(500000)) + "_" + String(random(500000));
     int clientId_len = clientIdStr.length() + 1;
     char clientId[clientId_len];
-    clientIdStr.toCharArray(clientId, clientId_len);    
+    clientIdStr.toCharArray(clientId, clientId_len);
 
     if (microblu.connect(clientId, UUID, TOKEN)){
 
@@ -728,7 +731,7 @@ void loop() {
 
       //you need to subscribe to your uuid to get messages for you
       microblu.subscribe(UUID);
-      
+
     }
-  } 
+  }
 }

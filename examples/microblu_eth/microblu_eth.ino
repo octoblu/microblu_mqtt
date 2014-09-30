@@ -6,7 +6,7 @@
  * Requires our fork of the MQTT PubSubClient https://github.com/jacobrosenthal/pubsubclient
  *
  * Works with ethernet shields compatible with EthernetClient library from
- * Arduino. If you don't know, grab the original 
+ * Arduino. If you don't know, grab the original
  * http://arduino.cc/en/Main/ArduinoEthernetShield
  *
  * Remember not to mess with ethernet's unavailable pins (10, 11, 12, 13 and 4 if using SD card)
@@ -28,10 +28,12 @@
 #include <Firmata.h>
 
 ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno
-ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string 
+ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string
 
 StreamBuffer stream(write, read);
 StreamBuffer externalaccess(read, write);
+
+char outputBuffer[6];
 
 // Set the static IP address to use if the DHCP fails to assign
 IPAddress ip(192, 168, 0, 177);
@@ -39,11 +41,12 @@ IPAddress ip(192, 168, 0, 177);
 //you can't have 2 of the same mac on your network!
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-char server[] = "meshblu.octoblu.com";
+// char server[] = "meshblu.octoblu.com";
+char server[] = "192.168.200.35";
 
 //Your 'firmware' type UUID and token for Octoblu //TODO where to get one
-char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+char UUID[]  = "d870d511-1c42-11e4-861d-89322229e557";
+char TOKEN[] = "036lco5cu9haxajorciqfdv7sx3fecdi";
 
 EthernetClient client;
 PubSubClient microblu(server, 1883, onMessage, client);
@@ -80,7 +83,7 @@ int pinState[TOTAL_PINS];           // any value that has been written
 /* timer variables */
 unsigned long currentMillis;        // store the current value from millis()
 unsigned long previousMillis;       // for comparison with currentMillis
-int samplingInterval = 19;          // how often to run the main loop (in ms)
+int samplingInterval = 1000;        // how often to run the main loop (in ms)
 
 /* i2c data */
 struct i2c_device_info {
@@ -106,7 +109,7 @@ Servo servos[MAX_SERVOS];
 void readAndReportData(byte address, int theRegister, byte numBytes) {
   // allow I2C requests that don't require a register read
   // for example, some devices using an interrupt pin to signify new data available
-  // do not always require the register read so upon interrupt you call Wire.requestFrom()  
+  // do not always require the register read so upon interrupt you call Wire.requestFrom()
   if (theRegister != REGISTER_NOT_SPECIFIED) {
     Wire.beginTransmission(address);
     #if ARDUINO >= 100
@@ -142,7 +145,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes) {
     if(numBytes > Wire.available()) {
       Firmata.sendString("I2C Read Error: Too many bytes received");
     } else {
-      Firmata.sendString("I2C Read Error: Too few bytes received"); 
+      Firmata.sendString("I2C Read Error: Too few bytes received");
     }
   }
 
@@ -156,6 +159,10 @@ void outputPort(byte portNumber, byte portValue, byte forceSend)
   portValue = portValue & portConfigInputs[portNumber];
   // only send if the value is different than previously sent
   if(forceSend || previousPINs[portNumber] != portValue) {
+    Serial.print("portValue: ");
+    Serial.print(portValue);
+    Serial.println("");
+
     Firmata.sendDigitalPort(portNumber, portValue);
     previousPINs[portNumber] = portValue;
   }
@@ -169,6 +176,7 @@ void checkDigitalInputs(void)
   /* Using non-looping code allows constants to be given to readPort().
    * The compiler will apply substantial optimizations if the inputs
    * to readPort() are compile-time constants. */
+
   if (TOTAL_PORTS > 0 && reportPINs[0]) outputPort(0, readPort(0, portConfigInputs[0]), false);
   if (TOTAL_PORTS > 1 && reportPINs[1]) outputPort(1, readPort(1, portConfigInputs[1]), false);
   if (TOTAL_PORTS > 2 && reportPINs[2]) outputPort(2, readPort(2, portConfigInputs[2]), false);
@@ -193,6 +201,13 @@ void checkDigitalInputs(void)
  */
 void setPinModeCallback(byte pin, int mode)
 {
+  Serial.print("setPinModeCallback: ");
+  Serial.print(pin);
+  Serial.print(",");
+  Serial.print(mode);
+  Serial.println();
+
+
   if (pinConfig[pin] == I2C && isI2CEnabled && mode != I2C) {
     // disable i2c so pins can be used for other functions
     // the following if statements should reconfigure the pins properly
@@ -314,6 +329,12 @@ void digitalWriteCallback(byte port, int value)
 //}
 void reportAnalogCallback(byte analogPin, int value)
 {
+  Serial.print("reportAnalogCallback: ");
+  Serial.print(analogPin);
+  Serial.print(",");
+  Serial.print(value);
+  Serial.println();
+
   if (analogPin < TOTAL_ANALOG_PINS) {
     if(value == 0) {
       analogInputsToReport = analogInputsToReport &~ (1 << analogPin);
@@ -324,10 +345,16 @@ void reportAnalogCallback(byte analogPin, int value)
   // TODO: save status to EEPROM here, if changed
 }
 
-void reportDigitalCallback(byte port, int value)
+void reportDigitalCallback(byte pin, int value)
 {
-  if (port < TOTAL_PORTS) {
-    reportPINs[port] = (byte)value;
+  Serial.print("reportDigitalCallback: ");
+  Serial.print(pin);
+  Serial.print(",");
+  Serial.print(value);
+  Serial.println();
+
+  if ((pin / 8) < TOTAL_PORTS) {
+    reportPINs[pin / 8] = (byte)value;
   }
   // do not disable analog reporting on these 8 pins, to allow some
   // pins used for digital, others analog.  Instead, allow both types
@@ -347,8 +374,8 @@ void sysexCallback(byte command, byte argc, byte *argv)
   byte slaveAddress;
   byte slaveRegister;
   byte data;
-  unsigned int delayTime; 
-  
+  unsigned int delayTime;
+
   switch(command) {
   case I2C_REQUEST:
     mode = argv[1] & I2C_READ_WRITE_MODE_MASK;
@@ -399,11 +426,11 @@ void sysexCallback(byte command, byte argc, byte *argv)
       query[queryIndex].bytes = argv[4] + (argv[5] << 7);
       break;
     case I2C_STOP_READING:
-    byte queryIndexToSkip;      
+    byte queryIndexToSkip;
       // if read continuous mode is enabled for only 1 i2c device, disable
       // read continuous reporting for that device
       if (queryIndex <= 0) {
-        queryIndex = -1;        
+        queryIndex = -1;
       } else {
         // if read continuous mode is enabled for multiple devices,
         // determine which device to stop reading and remove it's data from
@@ -414,12 +441,12 @@ void sysexCallback(byte command, byte argc, byte *argv)
             break;
           }
         }
-        
+
         for (byte i = queryIndexToSkip; i<queryIndex + 1; i++) {
           if (i < MAX_QUERIES) {
             query[i].addr = query[i+1].addr;
             query[i].reg = query[i+1].addr;
-            query[i].bytes = query[i+1].bytes; 
+            query[i].bytes = query[i+1].bytes;
           }
         }
         queryIndex--;
@@ -439,7 +466,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
     if (!isI2CEnabled) {
       enableI2CPins();
     }
-    
+
     break;
   case SERVO_CONFIG:
     if(argc > 4) {
@@ -461,7 +488,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       samplingInterval = argv[0] + (argv[1] << 7);
       if (samplingInterval < MINIMUM_SAMPLING_INTERVAL) {
         samplingInterval = MINIMUM_SAMPLING_INTERVAL;
-      }      
+      }
     } else {
       //Firmata.sendString("Not enough data");
     }
@@ -498,7 +525,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       if (IS_PIN_I2C(pin)) {
         Firmata.write(I2C);
-        Firmata.write(1);  // to do: determine appropriate value 
+        Firmata.write(1);  // to do: determine appropriate value
       }
       Firmata.write(127);
     }
@@ -533,17 +560,17 @@ void sysexCallback(byte command, byte argc, byte *argv)
 void enableI2CPins()
 {
   byte i;
-  // is there a faster way to do this? would probaby require importing 
+  // is there a faster way to do this? would probaby require importing
   // Arduino.h to get SCL and SDA pins
   for (i=0; i < TOTAL_PINS; i++) {
     if(IS_PIN_I2C(i)) {
       // mark pins as i2c so they are ignore in non i2c data requests
       setPinModeCallback(i, I2C);
-    } 
+    }
   }
-   
-  isI2CEnabled = true; 
-  
+
+  isI2CEnabled = true;
+
   // is there enough time before the first I2C request to call this here?
   Wire.begin();
 }
@@ -576,7 +603,7 @@ void systemResetCallback()
   // pins with analog capability default to analog input
   // otherwise, pins default to digital output
   for (byte i=0; i < TOTAL_PINS; i++) {
-    
+
     // skip SPI pins for Ethernet/Wifi Shield //JJR
     if ( (i==4) || (i==MOSI) || (i==MISO) || (i==SCK) || (i==SS) )
       continue;
@@ -607,10 +634,13 @@ void systemResetCallback()
 void onMessage(char* topic, byte* payload, unsigned int length) {
 
  // handle incoming messages, well just print it for now
+ Serial.print("topic: ");
  Serial.println(topic);
+
+ Serial.print("payload: ");
  for(int i =0; i<length; i++){
    Serial.print((char)payload[i]);
- }    
+ }
  Serial.println();
 
  b64::decode((char*)payload, length, externalaccess);
@@ -629,7 +659,7 @@ void setup()
     // try to congifure using IP address instead of DHCP:
     Ethernet.begin(mac, ip);
   }
-  
+
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -642,29 +672,29 @@ void setup()
 
   Firmata.begin(stream);
   systemResetCallback();  // reset to default config
-  
+
 }
 
 void loop()
 {
   //we need to call loop for the mqtt library to do its thing and send/receive our messages
   if(microblu.loop()){
-    
+
     byte pin, analogPin;
-    
+
     /* DIGITALREAD - as fast as possible, check for changes and output them to the
      * FTDI buffer using Serial.print()  */
-    checkDigitalInputs();  
-    
+    checkDigitalInputs();
+
     /* SERIALREAD - processing incoming messagse as soon as possible, while still
      * checking digital inputs.  */
     while(Firmata.available())
       Firmata.processInput();
-    
+
     /* SEND FTDI WRITE BUFFER - make sure that the FTDI buffer doesn't go over
      * 60 bytes. use a timer to sending an event character every 4 ms to
      * trigger the buffer to dump. */
-    
+
     currentMillis = millis();
     if (currentMillis - previousMillis > samplingInterval) {
       previousMillis += samplingInterval;
@@ -684,32 +714,32 @@ void loop()
         }
       }
     }
-  
+
     //see if firmata left us any goodies
     while(externalaccess.available()){
-    
-      //wifi has a buffer limit ~90, want around 80, so ~51 before encoding
+
+
+      // //wifi has a buffer limit ~90, want around 80, so ~51 before encoding
       int len = b64::encodeLength(externalaccess.available() > 51 ? 51 : externalaccess.available());
-      
-      microblu.publishHeader("tb", len, false);
-        
-      b64::encode(externalaccess, client, len);
-            
+
+      // THIS NEEDS TO BE B64ENCODED!
+      b64::encode(externalaccess, outputBuffer, len);
+      microblu.publish("tb", outputBuffer);
     }
-   
+
   }else
   {
     //get rid of anything in the buffer
     while(externalaccess.available())
       externalaccess.read();
-      
+
     //oops we're not connected yet or we lost connection
     Serial.println(F("connecting..."));
-      
+
     String clientIdStr = "microblu_" + String(random(500000)) + "_" + String(random(500000));
     int clientId_len = clientIdStr.length() + 1;
     char clientId[clientId_len];
-    clientIdStr.toCharArray(clientId, clientId_len);    
+    clientIdStr.toCharArray(clientId, clientId_len);
 
     if (microblu.connect(clientId, UUID, TOKEN)){
 
@@ -718,7 +748,6 @@ void loop()
 
       //you need to subscribe to your uuid to get messages for you
       microblu.subscribe(UUID);
-      
     }
-  } 
+  }
 }
