@@ -41,12 +41,11 @@ IPAddress ip(192, 168, 0, 177);
 //you can't have 2 of the same mac on your network!
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-// char server[] = "meshblu.octoblu.com";
-char server[] = "192.168.200.35";
+char server[] = "meshblu.octoblu.com";
 
 //Your 'firmware' type UUID and token for Octoblu //TODO where to get one
-char UUID[]  = "d870d511-1c42-11e4-861d-89322229e557";
-char TOKEN[] = "036lco5cu9haxajorciqfdv7sx3fecdi";
+char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 EthernetClient client;
 PubSubClient microblu(server, 1883, onMessage, client);

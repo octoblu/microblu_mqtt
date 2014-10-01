@@ -33,18 +33,17 @@ ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 stri
 StreamBuffer stream(write, read);
 StreamBuffer externalaccess(read, write);
 
-char ssid[] = "OB-HQ"; //  your network SSID (name)
-char pass[] = "0ct0b1u2014";    // your WPA network password
+char ssid[] = "ssid";     // your network SSID (name)
+char pass[] = "password"; // your WPA network password
 int keyIndex = 0;              // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 
 char server[] = "meshblu.octoblu.com";
-// char server[] = "192.168.200.35";
 
 //Your 'firmware' type UUID and token for Octoblu //TODO where to get one
-char UUID[]  = "d870d511-1c42-11e4-861d-89322229e557";
-char TOKEN[] = "036lco5cu9haxajorciqfdv7sx3fecdi";
+char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 WiFiClient client;
 PubSubClient microblu(server, 1883, onMessage, client);
