@@ -735,10 +735,8 @@ void loop()
     //oops we're not connected yet or we lost connection
     Serial.println(F("connecting..."));
 
-    String clientIdStr = "microblu_" + String(random(500000)) + "_" + String(random(500000));
-    int clientId_len = clientIdStr.length() + 1;
-    char clientId[clientId_len];
-    clientIdStr.toCharArray(clientId, clientId_len);
+    char clientId[40] = "mb_";
+    strcat(clientId, UUID);
 
     if (microblu.connect(clientId, UUID, TOKEN)){
 
