@@ -10,12 +10,15 @@ Microblu::Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort) 
 void Microblu::initialize(Client &networkClient) {
 
   meshblu = PubSubClient(meshbluHost, meshbluPort, this, networkClient);
-  if(meshblu.connect("madeup", uuid, token)){
-    Serial.println("connected");
-  } else {
-    Serial.println("NOT connected");
+
+  char clientId[40] = "mb_";
+  strcat(clientId, uuid);
+
+  if(!meshblu.connect(clientId, uuid, token)){
+    Serial.println("Error connecting to Meshblu");
+    return;
   }
-  // firmata->initialize();
+  firmata.initialize();
 }
 
 void Microblu::loop() {
