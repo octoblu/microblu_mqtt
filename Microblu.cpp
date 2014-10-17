@@ -15,24 +15,23 @@ void Microblu::initialize(Client &networkClient) {
   strcat(clientId, uuid);
 
   if(!meshblu.connect(clientId, uuid, token)){
-    Serial.println("Error connecting to Meshblu");
     return;
   }
-  firmata.initialize();
+
+  meshblu.subscribe(uuid);
+  // firmata.initialize();
 }
 
 void Microblu::loop() {
   meshblu.loop();
-  // while(message = meshblu->getMessage()) {
-  //   firmata->
-  // }
-
-  // while(Firmata.available())
-  //   Firmata.processInput();
+  // firmata.loop();
 }
 
 void Microblu::onMessage(char* topic, byte* payload, unsigned int length) {
-  Serial.println("onMessage");
   Serial.println(topic);
+}
+
+void Microblu::onFirmataMessage(char *message) {
+  Serial.println(message);
 }
 

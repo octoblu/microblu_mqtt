@@ -1,13 +1,5 @@
 #include "StdFirmata.h"
 
-ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno
-ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string
-
-StreamBuffer stream(write, read);
-StreamBuffer externalaccess(read, write);
-
-char outputBuffer[6];
-
 #define I2C_WRITE B00000000
 #define I2C_READ B00001000
 #define I2C_READ_CONTINUOUSLY B00010000
@@ -19,6 +11,20 @@ char outputBuffer[6];
 #define MINIMUM_SAMPLING_INTERVAL 10
 
 #define REGISTER_NOT_SPECIFIED -1
+
+void enableI2CPins();
+void disableI2CPins();
+void reportAnalogCallback(byte analogPin, int value);
+
+ringbuffer write(150); //firmata out - Capabilities Response requires ~150 on Uno
+ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 string
+
+StreamBuffer stream(write, read);
+StreamBuffer externalaccess(read, write);
+
+char outputBuffer[6];
+
+FirmataMessageHandler *messageHandler;
 
 int analogInputsToReport = 0;
 
@@ -481,18 +487,17 @@ void systemResetCallback()
   analogInputsToReport = 0;
 }
 
-// void loop()
-// {
-//   //we need to call loop for the mqtt library to do its thing and send/receive our messages
-//   if(microblu.loop()){
-
-
-
 StdFirmata::StdFirmata(){
 
 }
 
 void StdFirmata::initialize(){
+  initialize(NULL);
+}
+
+void StdFirmata::initialize(FirmataMessageHandler *newMessageHandler){
+  messageHandler = newMessageHandler;
+
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -512,11 +517,14 @@ void consumeFirmataGoodies(){
     int len = b64::encodeLength(externalaccess.available() > 51 ? 51 : externalaccess.available());
 
     b64::encode(externalaccess, outputBuffer, len);
-    microblu.publish("tb", outputBuffer);
+    if (messageHandler){
+       messageHandler->onFirmataMessage(outputBuffer);
+    }
   }
 }
 
 void doAnalogReads(){
+  byte pin, analogPin;
   for(pin=0; pin<TOTAL_PINS; pin++) {
     if (IS_PIN_ANALOG(pin) && pinConfig[pin] == ANALOG) {
       analogPin = PIN_TO_ANALOG(pin);
