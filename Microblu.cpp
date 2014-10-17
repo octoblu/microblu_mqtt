@@ -1,18 +1,25 @@
 #include "Microblu.h";
 
-Microblu::Microblu(char* uuid, char* token){
+Microblu::Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort) {
+  this->uuid = uuid;
+  this->token = token;
+  this->meshbluHost = meshbluHost;
+  this->meshbluPort = meshbluPort;
 }
 
-Microblu::Microblu(char* uuid, char* token, char* meshbluHost, int meshbluPort) {
-  // StdFirmata firmata();
-}
+void Microblu::initialize(Client &networkClient) {
 
-void Microblu::initialize(void *networkClient) {
-  // meshblu->connect();
+  meshblu = PubSubClient(meshbluHost, meshbluPort, this, networkClient);
+  if(meshblu.connect("madeup", uuid, token)){
+    Serial.println("connected");
+  } else {
+    Serial.println("NOT connected");
+  }
   // firmata->initialize();
 }
 
 void Microblu::loop() {
+  meshblu.loop();
   // while(message = meshblu->getMessage()) {
   //   firmata->
   // }
@@ -20,3 +27,9 @@ void Microblu::loop() {
   // while(Firmata.available())
   //   Firmata.processInput();
 }
+
+void Microblu::onMessage(char* topic, byte* payload, unsigned int length) {
+  Serial.println("onMessage");
+  Serial.println(topic);
+}
+
