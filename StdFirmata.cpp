@@ -263,85 +263,85 @@ void sysexCallback(byte command, byte argc, byte *argv)
   unsigned int delayTime;
 
   switch(command) {
-  case I2C_REQUEST:
-    mode = argv[1] & I2C_READ_WRITE_MODE_MASK;
-    if (argv[1] & I2C_10BIT_ADDRESS_MODE_MASK) {
-      Firmata.sendString("10-bit addressing mode is not yet supported");
-      return;
-    }
-    else {
-      slaveAddress = argv[0];
-    }
+  // case I2C_REQUEST:
+  //   mode = argv[1] & I2C_READ_WRITE_MODE_MASK;
+  //   if (argv[1] & I2C_10BIT_ADDRESS_MODE_MASK) {
+  //     Firmata.sendString("10-bit addressing mode is not yet supported");
+  //     return;
+  //   }
+  //   else {
+  //     slaveAddress = argv[0];
+  //   }
 
-    switch(mode) {
-    case I2C_WRITE:
-      Wire.beginTransmission(slaveAddress);
-      for (byte i = 2; i < argc; i += 2) {
-        data = argv[i] + (argv[i + 1] << 7);
-        #if ARDUINO >= 100
-        Wire.write(data);
-        #else
-        Wire.send(data);
-        #endif
-      }
-      Wire.endTransmission();
-      delayMicroseconds(70);
-      break;
-    case I2C_READ:
-      if (argc == 6) {
-        // a slave register is specified
-        slaveRegister = argv[2] + (argv[3] << 7);
-        data = argv[4] + (argv[5] << 7);  // bytes to read
-        readAndReportData(slaveAddress, (int)slaveRegister, data);
-      }
-      else {
-        // a slave register is NOT specified
-        data = argv[2] + (argv[3] << 7);  // bytes to read
-        readAndReportData(slaveAddress, (int)REGISTER_NOT_SPECIFIED, data);
-      }
-      break;
-    case I2C_READ_CONTINUOUSLY:
-      if ((queryIndex + 1) >= MAX_QUERIES) {
-        // too many queries, just ignore
-        Firmata.sendString("too many queries");
-        break;
-      }
-      queryIndex++;
-      query[queryIndex].addr = slaveAddress;
-      query[queryIndex].reg = argv[2] + (argv[3] << 7);
-      query[queryIndex].bytes = argv[4] + (argv[5] << 7);
-      break;
-    case I2C_STOP_READING:
-    byte queryIndexToSkip;
-      // if read continuous mode is enabled for only 1 i2c device, disable
-      // read continuous reporting for that device
-      if (queryIndex <= 0) {
-        queryIndex = -1;
-      } else {
-        // if read continuous mode is enabled for multiple devices,
-        // determine which device to stop reading and remove it's data from
-        // the array, shifiting other array data to fill the space
-        for (byte i = 0; i < queryIndex + 1; i++) {
-          if (query[i].addr = slaveAddress) {
-            queryIndexToSkip = i;
-            break;
-          }
-        }
+  //   switch(mode) {
+  //   case I2C_WRITE:
+  //     Wire.beginTransmission(slaveAddress);
+  //     for (byte i = 2; i < argc; i += 2) {
+  //       data = argv[i] + (argv[i + 1] << 7);
+  //       #if ARDUINO >= 100
+  //       Wire.write(data);
+  //       #else
+  //       Wire.send(data);
+  //       #endif
+  //     }
+  //     Wire.endTransmission();
+  //     delayMicroseconds(70);
+  //     break;
+  //   case I2C_READ:
+  //     if (argc == 6) {
+  //       // a slave register is specified
+  //       slaveRegister = argv[2] + (argv[3] << 7);
+  //       data = argv[4] + (argv[5] << 7);  // bytes to read
+  //       readAndReportData(slaveAddress, (int)slaveRegister, data);
+  //     }
+  //     else {
+  //       // a slave register is NOT specified
+  //       data = argv[2] + (argv[3] << 7);  // bytes to read
+  //       readAndReportData(slaveAddress, (int)REGISTER_NOT_SPECIFIED, data);
+  //     }
+  //     break;
+  //   case I2C_READ_CONTINUOUSLY:
+  //     if ((queryIndex + 1) >= MAX_QUERIES) {
+  //       // too many queries, just ignore
+  //       Firmata.sendString("too many queries");
+  //       break;
+  //     }
+  //     queryIndex++;
+  //     query[queryIndex].addr = slaveAddress;
+  //     query[queryIndex].reg = argv[2] + (argv[3] << 7);
+  //     query[queryIndex].bytes = argv[4] + (argv[5] << 7);
+  //     break;
+  //   case I2C_STOP_READING:
+  //   byte queryIndexToSkip;
+  //     // if read continuous mode is enabled for only 1 i2c device, disable
+  //     // read continuous reporting for that device
+  //     if (queryIndex <= 0) {
+  //       queryIndex = -1;
+  //     } else {
+  //       // if read continuous mode is enabled for multiple devices,
+  //       // determine which device to stop reading and remove it's data from
+  //       // the array, shifiting other array data to fill the space
+  //       for (byte i = 0; i < queryIndex + 1; i++) {
+  //         if (query[i].addr = slaveAddress) {
+  //           queryIndexToSkip = i;
+  //           break;
+  //         }
+  //       }
 
-        for (byte i = queryIndexToSkip; i<queryIndex + 1; i++) {
-          if (i < MAX_QUERIES) {
-            query[i].addr = query[i+1].addr;
-            query[i].reg = query[i+1].addr;
-            query[i].bytes = query[i+1].bytes;
-          }
-        }
-        queryIndex--;
-      }
-      break;
-    default:
-      break;
-    }
-    break;
+  //       for (byte i = queryIndexToSkip; i<queryIndex + 1; i++) {
+  //         if (i < MAX_QUERIES) {
+  //           query[i].addr = query[i+1].addr;
+  //           query[i].reg = query[i+1].addr;
+  //           query[i].bytes = query[i+1].bytes;
+  //         }
+  //       }
+  //       queryIndex--;
+  //     }
+  //     break;
+  //   default:
+  //     break;
+  //   }
+  //   break;
   case I2C_CONFIG:
     delayTime = (argv[0] + (argv[1] << 7));
 
@@ -425,9 +425,9 @@ void sysexCallback(byte command, byte argc, byte *argv)
       Firmata.write(pin);
       if (pin < TOTAL_PINS) {
         Firmata.write((byte)pinConfig[pin]);
-  Firmata.write((byte)pinState[pin] & 0x7F);
-  if (pinState[pin] & 0xFF80) Firmata.write((byte)(pinState[pin] >> 7) & 0x7F);
-  if (pinState[pin] & 0xC000) Firmata.write((byte)(pinState[pin] >> 14) & 0x7F);
+        Firmata.write((byte)pinState[pin] & 0x7F);
+        if (pinState[pin] & 0xFF80) Firmata.write((byte)(pinState[pin] >> 7) & 0x7F);
+        if (pinState[pin] & 0xC000) Firmata.write((byte)(pinState[pin] >> 14) & 0x7F);
       }
       Firmata.write(END_SYSEX);
     }
@@ -512,6 +512,10 @@ void StdFirmata::initialize(FirmataMessageHandler *newMessageHandler){
   systemResetCallback();  // reset to default config
 }
 
+void StdFirmata::receiveMessage(byte* payload, unsigned int length){
+  b64::decode((char*)payload, length, externalaccess);
+}
+
 void consumeFirmataGoodies(){
   while(externalaccess.available()){
     int len = b64::encodeLength(externalaccess.available() > 51 ? 51 : externalaccess.available());
@@ -554,7 +558,7 @@ void StdFirmata::loop(){
     previousMillis += samplingInterval;
 
     doAnalogReads();
-    reportI2CData();
+    // reportI2CData();
     consumeFirmataGoodies();
   }
 }

@@ -19,19 +19,20 @@ void Microblu::initialize(Client &networkClient) {
   }
 
   meshblu.subscribe(uuid);
-  // firmata.initialize();
+  firmata.initialize();
 }
 
 void Microblu::loop() {
   meshblu.loop();
-  // firmata.loop();
+  firmata.loop();
 }
 
 void Microblu::onMessage(char* topic, byte* payload, unsigned int length) {
-  Serial.println(topic);
+  Serial.println(String(length));
+  firmata.receiveMessage(payload, length);
 }
 
 void Microblu::onFirmataMessage(char *message) {
-  Serial.println(message);
+  // Serial.println(message);
 }
 

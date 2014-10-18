@@ -8,7 +8,7 @@
 #include "Client.h"
 
 class Microblu : public MessageHandler, public FirmataMessageHandler {
-  // StdFirmata firmata;
+  StdFirmata firmata;
   PubSubClient meshblu;
 
   char *uuid, *token, *meshbluHost;

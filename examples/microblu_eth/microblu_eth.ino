@@ -11,7 +11,7 @@
 #define UUID  "68ce70e1-5636-11e4-a414-671a5d380d7e"
 #define TOKEN "661sg1wxr61ug14ifgtnggr1xwfry66r"
 
-Microblu microblu(UUID, TOKEN, MESHBLU_HOST, MESHBLU_PORT);
+Microblu *microblu = new Microblu(UUID, TOKEN, MESHBLU_HOST, MESHBLU_PORT);
 EthernetClient networkClient;
 
 IPAddress ip(192, 168, 200, 177);
@@ -24,9 +24,9 @@ void setup() {
     Ethernet.begin(mac, ip);
   }
 
-  microblu.initialize(networkClient);
+  microblu->initialize(networkClient);
 }
 
 void loop() {
-  microblu.loop();
+  microblu->loop();
 }
