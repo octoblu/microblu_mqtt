@@ -3,7 +3,6 @@
 
 #include <SPI.h>
 #include <Servo.h>
-#include <Wire.h>
 #include <Firmata.h>
 
 class StdFirmata {

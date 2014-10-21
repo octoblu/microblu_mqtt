@@ -20,24 +20,22 @@ void Microblu::initialize(Client &networkClient) {
   }
 
   if (meshblu.subscribe(uuid)) {
+    Serial.println("Sub");
     firmata.initialize(firmataStream);
-    Serial.println("Initialized");
   }
 }
 
 void Microblu::loop() {
   meshblu.loop();
   if (meshbluStream.available()) {
-    Serial.println("Meshblu yo");
-    Serial.println(meshbluStream.available());
     base64_decode_stream(meshbluStream, firmataStream);
   }
-  // firmata.loop();
   if (firmataStream.available()) {
-    Serial.println("About to decode, yo");
     Serial.println(firmataStream.available());
+  }
+  firmata.loop();
+  if (firmataStream.available()) {
     base64_encode_stream(firmataStream, base64Buf);
-    Serial.print("Decoded: ");
     Serial.println(base64Buf);
     // meshblu.publish("tb", base64Buf);
   }
