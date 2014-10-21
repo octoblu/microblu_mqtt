@@ -1,25 +1,29 @@
 #ifndef _MICROBLU_H
 #define _MICROBLU_H
 
+#define FIRMATA_BUFFER_SIZE 150
+
 #include <StdFirmata.h>
 #include <PubSubClient.h>
-#include <MessageHandler.h>
-#include <FirmataMessageHandler.h>
+#include "StreamBuffer.h"
 #include "Client.h"
+#include "Base64.h"
 
-class Microblu : public MessageHandler, public FirmataMessageHandler {
+class Microblu {
+  StreamBuffer firmataStream;
+  StreamBuffer meshbluStream;
+
   StdFirmata firmata;
   PubSubClient meshblu;
 
   char *uuid, *token, *meshbluHost;
   int meshbluPort;
+  char base64Buf[20];
 
 public:
   Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort);
   void initialize(Client &networkClient);
   void loop();
-  void onMessage(char *topic, byte *payload, unsigned int length);
-  void onFirmataMessage(char *message);
 };
 
 #endif // _MICROBLU_H

@@ -7,11 +7,11 @@
 #include "Arduino.h"
 #endif
 
-#include "ringbuffer.h"
+#include "QueueArray.h"
 
 class StreamBuffer : public Stream {
   public:
-    StreamBuffer(ringbuffer &writebuf, ringbuffer &readbuf);
+    StreamBuffer();
     
     // int read(uint8_t *buf, size_t size);
     void flush();
@@ -23,8 +23,7 @@ class StreamBuffer : public Stream {
     int peek();
 
   private:
-    ringbuffer *_readbuf;
-    ringbuffer *_writebuf;
+    QueueArray<char> *_buf;
 };
 
 #endif // _StreamBuffer_H

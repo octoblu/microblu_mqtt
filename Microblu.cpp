@@ -5,11 +5,12 @@ Microblu::Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort) 
   this->token = token;
   this->meshbluHost = meshbluHost;
   this->meshbluPort = meshbluPort;
+  this->firmataStream = StreamBuffer();
+  this->meshbluStream = StreamBuffer();
 }
 
 void Microblu::initialize(Client &networkClient) {
-
-  meshblu = PubSubClient(meshbluHost, meshbluPort, this, networkClient);
+  meshblu = PubSubClient(meshbluHost, meshbluPort, NULL, networkClient, meshbluStream);
 
   char clientId[40] = "mb_";
   strcat(clientId, uuid);
@@ -18,21 +19,26 @@ void Microblu::initialize(Client &networkClient) {
     return;
   }
 
-  meshblu.subscribe(uuid);
-  firmata.initialize();
+  if (meshblu.subscribe(uuid)) {
+    firmata.initialize(firmataStream);
+    Serial.println("Initialized");
+  }
 }
 
 void Microblu::loop() {
   meshblu.loop();
-  firmata.loop();
+  if (meshbluStream.available()) {
+    Serial.println("Meshblu yo");
+    Serial.println(meshbluStream.available());
+    base64_decode_stream(meshbluStream, firmataStream);
+  }
+  // firmata.loop();
+  if (firmataStream.available()) {
+    Serial.println("About to decode, yo");
+    Serial.println(firmataStream.available());
+    base64_encode_stream(firmataStream, base64Buf);
+    Serial.print("Decoded: ");
+    Serial.println(base64Buf);
+    // meshblu.publish("tb", base64Buf);
+  }
 }
-
-void Microblu::onMessage(char* topic, byte* payload, unsigned int length) {
-  Serial.println(String(length));
-  firmata.receiveMessage(payload, length);
-}
-
-void Microblu::onFirmataMessage(char *message) {
-  // Serial.println(message);
-}
-
