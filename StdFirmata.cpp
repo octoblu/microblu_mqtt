@@ -66,19 +66,19 @@ unsigned long previousMillis;       // for comparison with currentMillis
 int samplingInterval = 19;          // how often to run the main loop (in ms)
 
 /* i2c data */
-struct i2c_device_info {
-  byte addr;
-  byte reg;
-  byte bytes;
-};
+// struct i2c_device_info {
+//   byte addr;
+//   byte reg;
+//   byte bytes;
+// };
 
-/* for i2c read continuous more */
-i2c_device_info query[MAX_QUERIES];
+//  for i2c read continuous more 
+// i2c_device_info query[MAX_QUERIES];
 
-byte i2cRxData[32];
-boolean isI2CEnabled = false;
+// byte i2cRxData[32];
+// boolean isI2CEnabled = false;
 signed char queryIndex = -1;
-unsigned int i2cReadDelayTime = 0;  // default delay time between i2c read request and Wire.requestFrom()
+// unsigned int i2cReadDelayTime = 0;  // default delay time between i2c read request and Wire.requestFrom()
 
 Servo servos[MAX_SERVOS];
 /*==============================================================================
@@ -170,13 +170,13 @@ void checkDigitalInputs(void)
 }
 
 /* disable the i2c pins so they can be used for other functions */
-void disableI2CPins() {
-  isI2CEnabled = false;
-  // disable read continuous mode for all devices
-  queryIndex = -1;
-  // uncomment the following if or when the end() method is added to Wire library
-  // Wire.end();
-}
+// void disableI2CPins() {
+//   isI2CEnabled = false;
+//   // disable read continuous mode for all devices
+//   queryIndex = -1;
+//   // uncomment the following if or when the end() method is added to Wire library
+//   // Wire.end();
+// }
 
 
 // -----------------------------------------------------------------------------
@@ -203,11 +203,11 @@ void reportAnalogCallback(byte analogPin, int value)
  */
 void setPinModeCallback(byte pin, int mode)
 {
-  if (pinConfig[pin] == I2C && isI2CEnabled && mode != I2C) {
-    // disable i2c so pins can be used for other functions
-    // the following if statements should reconfigure the pins properly
-    disableI2CPins();
-  }
+  // if (pinConfig[pin] == I2C && isI2CEnabled && mode != I2C) {
+  //   // disable i2c so pins can be used for other functions
+  //   // the following if statements should reconfigure the pins properly
+  //   disableI2CPins();
+  // }
   if (IS_PIN_SERVO(pin) && mode != SERVO && servos[PIN_TO_SERVO(pin)].attached()) {
     servos[PIN_TO_SERVO(pin)].detach();
   }
@@ -261,13 +261,13 @@ void setPinModeCallback(byte pin, int mode)
         }
       }
       break;
-    case I2C:
-      if (IS_PIN_I2C(pin)) {
-        // mark the pin as i2c
-        // the user must call I2C_CONFIG to enable I2C for a device
-        pinConfig[pin] = I2C;
-      }
-      break;
+    // case I2C:
+    //   if (IS_PIN_I2C(pin)) {
+    //     // mark the pin as i2c
+    //     // the user must call I2C_CONFIG to enable I2C for a device
+    //     pinConfig[pin] = I2C;
+    //   }
+    //   break;
     default:
       Firmata.sendString("Unknown pin mode"); // TODO: put error msgs in EEPROM
   }
@@ -551,9 +551,9 @@ void systemResetCallback()
 {
   // initialize a defalt state
   // TODO: option to load config from EEPROM instead of default
-  if (isI2CEnabled) {
-    disableI2CPins();
-  }
+  // if (isI2CEnabled) {
+  //   disableI2CPins();
+  // }
   for (byte i = 0; i < TOTAL_PORTS; i++) {
     reportPINs[i] = false;      // by default, reporting off
     portConfigInputs[i] = 0;  // until activated
