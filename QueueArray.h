@@ -137,8 +137,8 @@ QueueArray<T>::QueueArray () {
   contents = (T *) malloc (sizeof (T) * initialSize);
 
   // if there is a memory allocation error.
-  if (contents == NULL)
-    exit ("QUEUE: insufficient memory to initialize queue.");
+  // if (contents == NULL)
+  //   exit ("QUEUE: insufficient memory to initialize queue.");
 
   // set the initial size of the queue.
   size = initialSize;
@@ -163,15 +163,15 @@ QueueArray<T>::~QueueArray () {
 template<typename T>
 void QueueArray<T>::resize (const int s) {
   // defensive issue.
-  if (s <= 0)
-    exit ("QUEUE: error due to undesirable size for queue size.");
+  // if (s <= 0)
+    // exit ("QUEUE: error due to undesirable size for queue size.");
 
   // allocate enough memory for the temporary array.
   T * temp = (T *) malloc (sizeof (T) * s);
 
   // if there is a memory allocation error.
-  if (temp == NULL)
-    exit ("QUEUE: insufficient memory to initialize temporary queue.");
+  // if (temp == NULL)
+    // exit ("QUEUE: insufficient memory to initialize temporary queue.");
   
   // copy the items from the old queue to the new one.
   for (int i = 0; i < items; i++)
@@ -218,8 +218,8 @@ void QueueArray<T>::push (const T i) {
 template<typename T>
 T QueueArray<T>::dequeue () {
   // check if the queue is empty.
-  if (isEmpty ())
-    exit ("QUEUE: can't pop item from queue: queue is empty.");
+  // if (isEmpty ())
+    // exit ("QUEUE: can't pop item from queue: queue is empty.");
 
   // fetch the item from the array.
   T item = contents[head++];
@@ -248,8 +248,8 @@ T QueueArray<T>::pop () {
 template<typename T>
 T QueueArray<T>::front () const {
   // check if the queue is empty.
-  if (isEmpty ())
-    exit ("QUEUE: can't get the front item of queue: queue is empty.");
+  // if (isEmpty ())
+    // exit ("QUEUE: can't get the front item of queue: queue is empty.");
     
   // get the item from the array.
   return contents[head];

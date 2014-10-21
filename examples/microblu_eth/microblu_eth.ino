@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <Firmata.h>
 #include <Microblu.h>
+#include <StdFirmata.h>
 #include <PubSubClient.h>
 
 #define MESHBLU_HOST "192.168.200.43"
@@ -12,19 +13,23 @@
 #define TOKEN "661sg1wxr61ug14ifgtnggr1xwfry66r"
 
 Microblu *microblu = new Microblu(UUID, TOKEN, MESHBLU_HOST, MESHBLU_PORT);
+StdFirmata *firmata = new StdFirmata();
 EthernetClient networkClient;
 
-IPAddress ip(192, 168, 200, 177);
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+IPAddress ip(192, 168, 200, 172);
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xE1 };
 
 void setup() {
   Serial.begin(9600);
 
+  Serial.println("ES");
   if (Ethernet.begin(mac) == 0) {
+    Serial.println("EF");
     Ethernet.begin(mac, ip);
   }
+  Serial.println("EE");
 
-  microblu->initialize(networkClient);
+  microblu->initialize(networkClient, firmata);
 }
 
 void loop() {

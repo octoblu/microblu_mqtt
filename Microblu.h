@@ -13,7 +13,7 @@ class Microblu {
   StreamBuffer firmataStream;
   StreamBuffer meshbluStream;
 
-  StdFirmata firmata;
+  StdFirmata *firmata;
   PubSubClient meshblu;
 
   char *uuid, *token, *meshbluHost;
@@ -22,7 +22,7 @@ class Microblu {
 
 public:
   Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort);
-  void initialize(Client &networkClient);
+  void initialize(Client &networkClient, StdFirmata *newFirmata);
   void loop();
 };
 

@@ -6,6 +6,7 @@
 #define _BASE64_H
 
 #include <Arduino.h>
+#include <Stream.h>
 
 /* b64_alphabet:
  *    Description: Base64 alphabet table, a mapping between integers

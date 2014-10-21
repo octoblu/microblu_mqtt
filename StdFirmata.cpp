@@ -317,10 +317,10 @@ void digitalWriteCallback(byte port, int value)
 }
 
 
-void reportDigitalCallback(byte port, int value)
+void reportDigitalCallback(byte pin, int value)
 {
-  if (port < TOTAL_PORTS) {
-    reportPINs[port] = (byte)value;
+  if ((pin / 8) < TOTAL_PORTS) {
+    reportPINs[pin / 8] = (byte)value;
   }
   // do not disable analog reporting on these 8 pins, to allow some
   // pins used for digital, others analog.  Instead, allow both types
@@ -586,8 +586,7 @@ void systemResetCallback()
 
 void StdFirmata::initialize(Stream &stream)
 {
-  // Firmata.setFirmwareNameAndVersion("Microblu", FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
-
+  Firmata.setFirmwareNameAndVersion("Microblu", FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
   Firmata.attach(DIGITAL_MESSAGE, digitalWriteCallback);
   Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
