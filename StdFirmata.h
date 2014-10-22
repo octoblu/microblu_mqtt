@@ -7,7 +7,7 @@
 
 class StdFirmata {
 public:
-  void initialize(Stream &stream);
+  void setup(Stream &stream);
   void loop();
 };
 

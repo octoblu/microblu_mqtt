@@ -72,7 +72,7 @@ int samplingInterval = 1000;          // how often to run the main loop (in ms)
 //   byte bytes;
 // };
 
-//  for i2c read continuous more 
+//  for i2c read continuous more
 // i2c_device_info query[MAX_QUERIES];
 
 // byte i2cRxData[32];
@@ -584,7 +584,7 @@ void systemResetCallback()
   */
 }
 
-void StdFirmata::initialize(Stream &stream)
+void StdFirmata::setup(Stream &stream)
 {
   Firmata.setFirmwareNameAndVersion("Microblu", FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);

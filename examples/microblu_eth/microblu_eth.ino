@@ -26,7 +26,7 @@ void setup() {
     Ethernet.begin(mac, ip);
   }
 
-  microblu->initialize(networkClient, firmata);
+  microblu->setup(networkClient, firmata);
 }
 
 void loop() {

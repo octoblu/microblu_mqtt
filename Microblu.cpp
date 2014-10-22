@@ -11,7 +11,7 @@ Microblu::Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort) 
   this->meshbluStream = StreamBuffer();
 }
 
-void Microblu::initialize(Client &networkClient, StdFirmata *newFirmata) {
+void Microblu::setup(Client &networkClient, StdFirmata *newFirmata) {
   meshblu = PubSubClient(meshbluHost, meshbluPort, NULL, networkClient, meshbluStream);
   firmata = newFirmata;
 
@@ -24,7 +24,7 @@ void Microblu::initialize(Client &networkClient, StdFirmata *newFirmata) {
   }
 
   if (meshblu.subscribe(uuid)) {
-    firmata->initialize(firmataStream);
+    firmata->setup(firmataStream);
   }
 }
 

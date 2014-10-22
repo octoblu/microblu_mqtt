@@ -25,7 +25,7 @@ class Microblu {
 
 public:
   Microblu(char *uuid, char *token, char *meshbluHost, int meshbluPort);
-  void initialize(Client &networkClient, StdFirmata *newFirmata);
+  void setup(Client &networkClient, StdFirmata *newFirmata);
   void loop();
 };
 

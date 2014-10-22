@@ -37,7 +37,7 @@ void setup() {
     delay(10000);
   }
 
-  microblu->initialize(networkClient, firmata);
+  microblu->setup(networkClient, firmata);
 }
 
 void loop() {
