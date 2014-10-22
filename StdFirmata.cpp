@@ -63,7 +63,7 @@ int pinState[TOTAL_PINS];           // any value that has been written
 /* timer variables */
 unsigned long currentMillis;        // store the current value from millis()
 unsigned long previousMillis;       // for comparison with currentMillis
-int samplingInterval = 19;          // how often to run the main loop (in ms)
+int samplingInterval = 1000;          // how often to run the main loop (in ms)
 
 /* i2c data */
 // struct i2c_device_info {
@@ -612,8 +612,10 @@ void StdFirmata::loop()
 
   /* SERIALREAD - processing incoming messagse as soon as possible, while still
    * checking digital inputs.  */
-  while (Firmata.available())
+  while (Firmata.available()){
+    Serial.println(Firmata.available());
     Firmata.processInput();
+  }
 
   /* SEND FTDI WRITE BUFFER - make sure that the FTDI buffer doesn't go over
    * 60 bytes. use a timer to sending an event character every 4 ms to

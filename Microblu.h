@@ -5,12 +5,15 @@
 
 #include <StdFirmata.h>
 #include <PubSubClient.h>
+#include "CrossStreamBuffer.h"
 #include "StreamBuffer.h"
 #include "Client.h"
 #include "Base64.h"
 
 class Microblu {
-  StreamBuffer firmataStream;
+  CrossStreamBuffer firmataStream;
+  StreamBuffer inFirmataStream;
+  StreamBuffer outFirmataStream;
   StreamBuffer meshbluStream;
 
   StdFirmata *firmata;

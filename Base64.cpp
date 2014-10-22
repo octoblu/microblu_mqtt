@@ -155,6 +155,8 @@ int base64_decode_stream(Stream &input, Stream &output) {
       a4_to_a3(a3,a4);
 
       for (i = 0; i < 3; i++) {
+        Serial.print("d: ");
+        Serial.println(a3[i]);
         output.write(a3[i]);
       }
       i = 0;
@@ -173,6 +175,8 @@ int base64_decode_stream(Stream &input, Stream &output) {
     a4_to_a3(a3,a4);
 
     for (j = 0; j < i - 1; j++) {
+      Serial.print("d: ");
+      Serial.println(a3[j]);
       output.write(a3[j]);
       decLen++;
     }

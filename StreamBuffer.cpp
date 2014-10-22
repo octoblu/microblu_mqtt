@@ -2,7 +2,11 @@
 #include "StreamBuffer.h"
   
 StreamBuffer::StreamBuffer(){
-  _buf = new QueueArray<char>;
+  _buf = new QueueArray<unsigned char>;
+}
+
+StreamBuffer::StreamBuffer(QueueArray<unsigned char> *buf){
+  _buf = buf;
 }
 
 //place write data into a buffer to be sent on next flush or monitor

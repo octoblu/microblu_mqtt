@@ -22,12 +22,9 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xE1 };
 void setup() {
   Serial.begin(9600);
 
-  Serial.println("ES");
   if (Ethernet.begin(mac) == 0) {
-    Serial.println("EF");
     Ethernet.begin(mac, ip);
   }
-  Serial.println("EE");
 
   microblu->initialize(networkClient, firmata);
 }

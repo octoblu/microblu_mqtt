@@ -1,5 +1,5 @@
-#ifndef _STREAM_BUFFER_H_
-#define _STREAM_BUFFER_H_
+#ifndef _CROSS_STREAM_BUFFER_H_
+#define _CROSS_STREAM_BUFFER_H_
 
 #ifdef SPARK
 #include "application.h"
@@ -9,10 +9,12 @@
 
 #include "QueueArray.h"
 
-class StreamBuffer : public Stream {
+class CrossStreamBuffer : public Stream {
   public:
-    StreamBuffer();
-    StreamBuffer(QueueArray<unsigned char> *buf);
+    CrossStreamBuffer();
+
+    QueueArray<unsigned char> *inBuffer;
+    QueueArray<unsigned char> *outBuffer;
     
     // int read(uint8_t *buf, size_t size);
     void flush();
@@ -22,9 +24,6 @@ class StreamBuffer : public Stream {
     size_t write(char *payload, size_t length);
 
     int peek();
-
-  private:
-    QueueArray<unsigned char> *_buf;
 };
 
-#endif // _STREAM_BUFFER_H_
+#endif // _CROSS_STREAM_BUFFER_H_
