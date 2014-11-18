@@ -15,8 +15,10 @@ void Microblu::setup(Client &networkClient, StdFirmata *newFirmata) {
   meshblu = PubSubClient(meshbluHost, meshbluPort, NULL, networkClient, meshbluStream);
   firmata = newFirmata;
 
-  char clientId[40] = "mb_";
-  strcat(clientId, uuid);
+  String clientIdStr = "mb" + String(random(9999999999));
+  int clientId_len = clientIdStr.length() + 1;
+  char clientId[clientId_len];
+  clientIdStr.toCharArray(clientId, clientId_len);
 
   if(!meshblu.connect(clientId, uuid, token)){
     Serial.println(F("Failed to connect..."));

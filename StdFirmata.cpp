@@ -554,7 +554,14 @@ void systemResetCallback()
   // if (isI2CEnabled) {
   //   disableI2CPins();
   // }
+  Serial.println("Doing systemResetCallback()..................................");
+  Serial.print("Have TOTAL_PORTS: ");
+  Serial.print(TOTAL_PORTS);
+  Serial.println(".............................................................");
   for (byte i = 0; i < TOTAL_PORTS; i++) {
+    Serial.print("Doing systemResetCallback() on port ");
+    Serial.print(i);
+    Serial.println(".............................................................");
     reportPINs[i] = false;      // by default, reporting off
     portConfigInputs[i] = 0;  // until activated
     previousPINs[i] = 0;
@@ -562,13 +569,25 @@ void systemResetCallback()
   // pins with analog capability default to analog input
   // otherwise, pins default to digital output
   for (byte i = 0; i < TOTAL_PINS; i++) {
-    if (IS_PIN_ANALOG(i)) {
-      // turns off pullup, configures everything
-      setPinModeCallback(i, ANALOG);
-    } else {
-      // sets the output to 0, configures portConfigInputs
-      setPinModeCallback(i, OUTPUT);
-    }
+    if (!IS_PIN_I2C(i)) {
+        if (IS_PIN_ANALOG(i)) {
+          Serial.print("Doing setPinModeCallback ANALOG ");
+          Serial.print(i);
+          Serial.println(".............................................................");
+          // turns off pullup, configures everything
+          setPinModeCallback(i, ANALOG);
+        } else {
+          Serial.print("Doing setPinModeCallback OUTPUT ");
+          Serial.print(i);
+          Serial.println(".............................................................");
+          // sets the output to 0, configures portConfigInputs
+          setPinModeCallback(i, OUTPUT);
+        }
+      } else {
+        Serial.print("Skipping IS_PIN_I2C ");
+        Serial.print(i);
+        Serial.println(".............................................................");
+      }
   }
   // by default, do not report any analog inputs
   analogInputsToReport = 0;
