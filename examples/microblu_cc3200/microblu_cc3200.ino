@@ -53,21 +53,21 @@ ringbuffer read(50); //firmata in - min 67% of biggest incoming firmata b64 stri
 StreamBuffer stream(write, read);
 StreamBuffer externalaccess(read, write);
 
-char ssid[] = "yournetworkname";     //  your network SSID (name)
-char pass[] = "yourpassword";  // your WPA network password
+#define MESHBLU_HOST "meshblu.octoblu.com"
+#define MESHBLU_PORT 1883
+#define UUID  "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+#define TOKEN "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+#define WIFI_SSID       "yournetworkname"
+#define WIFI_PASSWORD   "yourpassword"
+
 unsigned int timeout = 30000;             // Milliseconds
-
-char server[] = "meshblu.octoblu.com";
-
-//Your 'firmware' type UUID and token for Microblu //TODO where to get one
-char UUID[]  = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-char TOKEN[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 //SFE_CC3000 wifi = SFE_CC3000(CC3000_INT, CC3000_EN, CC3000_CS);
 //SFE_CC3000_Client client = SFE_CC3000_Client(wifi);
 WiFiClient client;
 
-PubSubClient microblu(server, 1883, onMessage, client);
+PubSubClient microblu(MESHBLU_HOST, MESHBLU_PORT, onMessage, client);
 
 // move the following defines to Firmata.h?
 #define I2C_WRITE B00000000
@@ -601,6 +601,8 @@ void systemResetCallback()
     // skip SPI pins for Ethernet/Wifi Shield //JJR
     //if ( (i==CC3000_INT) || (i==CC3000_EN) || (i==CC3000_CS) || (i==MOSI) || (i==MISO) || (i==SCK) || (i==SS) )
     //  continue;
+    if (IS_PIN_I2C(i))
+      continue;
 
     if (IS_PIN_ANALOG(i)) {
       // turns off pullup, configures everything
@@ -680,7 +682,7 @@ void setup()
 
   Serial.begin(9600);
 
-  wifiConnect(ssid, pass, timeout);
+  wifiConnect(WIFI_SSID, WIFI_PASSWORD, timeout);
   /*;
   if ( wifi.init() ) {
     Serial.println(F("CC3000 initialization complete"));
@@ -775,27 +777,25 @@ void loop() {
     delay(10000);
 
     // attempt to connect to Wifi network:
-    if(wifiConnect(ssid, pass, timeout)) {
+    if(wifiConnect(WIFI_SSID, WIFI_PASSWORD, timeout)) {
 
-      String clientIdStr = "microblu_" + String(random(500000)) + "_" + String(random(500000));
+      String clientIdStr = "mb" + String(random(500000));
       int clientId_len = clientIdStr.length() + 1;
       char clientId[clientId_len];
       clientIdStr.toCharArray(clientId, clientId_len);    
 
       if (microblu.connect(clientId, UUID, TOKEN)){
-  
         //success!
         Serial.println(F("connected"));
   
         //you need to subscribe to your uuid to get messages for you
         microblu.subscribe(UUID);
         
+      }else
+      {
+          Serial.print(F("couldnt connect to: "));
+          Serial.println(WIFI_SSID);
       }
-      
-    }else
-    {
-        Serial.print(F("couldnt connect to: "));
-        Serial.println(ssid);
     }
   } 
 }
