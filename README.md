@@ -165,6 +165,7 @@ Lastly
 One note about the cc3000 is it is a VERY big library. We've had to make a few changes. The sketch no longer supports capabilty query. Most likely that doesn't mean anything to you so don't worry about it.
 
 ##Install CC3200
+__WARNING__: CC3200 support is experimental and still in development, some functionality may not yet be supported.
 
 These are instructions for a CC3200 LaunchPad:
 * http://www.ti.com/tool/cc3200-launchxl
