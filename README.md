@@ -18,6 +18,7 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
  * https://www.sparkfun.com/products/12071
  * https://pinocc.io/
  * https://www.spark.io/
+ * http://www.ti.com/tool/cc3200-launchxl
 
 ##Videos
 * https://www.youtube.com/watch?v=oQzWKPER_ic
@@ -25,7 +26,9 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
 
 ##Getting Started with Arduino
 
-To use microblu you will need to install the Arduino IDE and some required libraries.
+__NOTE__: The CC3200 LaunchPad requires the Energia IDE, see [CC3200 instructions](#install-cc3200).
+
+To use microblu on Arduino compatible devices you will need to install the Arduino IDE and some required libraries.
 
 Required Downloads:
 * [Arduino IDE](http://arduino.cc/en/Main/Software)
@@ -33,6 +36,7 @@ Required Downloads:
 * [PubSubClient Library](https://github.com/jacobrosenthal/pubsubclient/archive/master.zip)
 
 Proceed after you have successfully installed the Arduino IDE 
+
 
 ###Installing Libraries
 
@@ -160,7 +164,54 @@ Lastly
 
 One note about the cc3000 is it is a VERY big library. We've had to make a few changes. The sketch no longer supports capabilty query. Most likely that doesn't mean anything to you so don't worry about it.
 
-###Install Spark 
+##Install CC3200
+
+These are instructions for a CC3200 LaunchPad:
+* http://www.ti.com/tool/cc3200-launchxl
+
+### Setup Energia
+
+Clone a forked version of Energia:
+```
+git clone --depth=1 https://github.com/erikwilson/Energia.git && cd Energia
+```
+
+Build Energia:
+```
+(cd build && ant)
+```
+
+Install extra libraries:
+```
+(cd libraries && ./copy_libs.sh)
+```
+
+Install microblu_mqtt:
+```
+mkdir -p sketchbook/libraries && \
+  (cd sketchbook && git clone https://github.com/octoblu/microblu_mqtt.git && \
+   cd libraries && ln -s ../microblu_mqtt .)
+```
+
+### Set Jumpers
+
+__NOTE__: Ensure that the CC3200SDK-SERVICEPACK is installed within Windows (emulation with Wine will not work) and jumpers are set per TI instructions when flashing with Uniflash.
+
+When uploading sketches with Energia the SOP2 must be jumped to TCK, see:
+* http://energia.nu/cc3200guide/
+
+### Run Energia
+```
+(cd build && ant run)
+```
+
+Set the sketchbook folder to the folder created in Energia. 
+
+Open the CC3200 sketch through File -> Sketchbook -> microblu_mqtt -> microblu_cc3200.
+
+Follow instructions for [configuring your code](#configuring-your-code).
+
+##Install Spark 
 
 These are instructions for a Spark Core:
 * https://www.spark.io
