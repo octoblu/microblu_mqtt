@@ -20,11 +20,11 @@ Microblu OS supports Arduino ethernet or wifi shields (or any other device that 
  * https://www.spark.io/
  * http://www.ti.com/tool/cc3200-launchxl
 
-##Videos
+## Videos
 * https://www.youtube.com/watch?v=oQzWKPER_ic
 * https://www.youtube.com/watch?v=ZJNlqZXbrbM
 
-##Getting Started with Arduino
+## Getting Started with Arduino
 
 __NOTE__: The CC3200 LaunchPad requires the Energia IDE, see [CC3200 instructions](#install-cc3200).
 
@@ -38,14 +38,14 @@ Required Downloads:
 Proceed after you have successfully installed the Arduino IDE 
 
 
-###Installing Libraries
+### Installing Libraries
 
 * Unzip the libraries you've just downloaded and rename the folder for each library removing anything like "- master"
 * Open Arduino and go to Sketch->Import Library->Add Library and choose the main folders you renamed
 * If you goto File->Examples you should see microblu_mqtt 
 * Choose the example that corresponds to the shield you will be using before proceeding.
 
-##Configuring your code
+## Configuring your code
 
 First you need a valid UUID and Token from Skynet. Copy and paste the following into a terminal window, and put the resulting UUID and TOKEN in your sketch.
 
@@ -63,14 +63,14 @@ Ensure the following have been added to your sketch:
 Save this sketch and move on to the corresponding tutorial!
 
 
-##Install Wifi 
+## Install Wifi 
 
 These are instructions for Arduino brand wifi
 * http://arduino.cc/en/Main/ArduinoWiFiShield
 
 IMPORTANT: Connect the IOREF pin to the 3.3v pin. If you’re using the Rev3 series Arduino controller, you don’t need to do this!
 
-###Step 1 - Test your WIFI shield
+### Step 1 - Test your WIFI shield
 
 Open the sketch:
 File->Examples->WIFI->WiFiWebClient. 
@@ -78,12 +78,12 @@ File->Examples->WIFI->WiFiWebClient.
 Put your connection details in and make sure it gets a connection to google that looks like this:
 * https://gist.github.com/jacobrosenthal/1dc81eef411392f1de71
 
-####Firmware Update
+#### Firmware Update
 If you've never updated your Wifi shields firmware, you'll see a message to update your firmware. Please do:
 * http://arduino.cc/en/Hacking/WiFiShieldFirmwareUpgrading
 * For Windows http://www.dfrobot.com/community/how-to-upgrade-arduino-wifi-shield-firmware-on-windows.html#comment-9233
 
-###Step 2 - check configuration
+### Step 2 - check configuration
 
 Open microblu_wifi example at File->Examples->microblu_mqtt and **follow the "Configuring your Code" section above** if you haven't
 
@@ -95,7 +95,7 @@ Lastly
 * Upload your code
 * Open a serial monitor and listen in at 9600 baudrate (this is how your Arduino will tell you if something broke)
 
-####Pins In use by Shield (Do not use these pins for anything else)
+#### Pins In use by Shield (Do not use these pins for anything else)
 
 * 7, 10, 11, 12, 13 
 * If the SD card is in use Pin 4 will also be unavailable.
@@ -117,23 +117,23 @@ Lastly
 * Upload your code
 * Open a serial monitor and listen in at 9600 baudrate (this is how your Arduino will tell you if something broke)
 
-####Pins In use by Shield (Do not use these pins for anything else)
+#### Pins In use by Shield (Do not use these pins for anything else)
 
 * 10, 11, 12, 13
 * If the SD card is in use Pin 4 will also be unavailable.
 
-##Install CC3000 
+## Install CC3000 
 
 These are instructions for any board using a CC3000 chip regardless of manufacturer. We prefer Sparkfun:
 * https://www.sparkfun.com/products/12071
 * http://www.adafruit.com/products/1491
 
 
-####Install Dependency 
+#### Install Dependency 
 The only library we know of that properly implements the Arduino network client library for the CC3000 is Sparkfun's and as long as you have any shield that uses a CC3000, donwnload and install their library as before:
 * [SFE_CC3000 Library](https://github.com/sparkfun/SFE_CC3000_Library/archive/master.zip)
 
-###Test Connection
+### Test Connection
 
 The first thing you should do is see if your shield and network work by using the standard wifi test at
 File->Examples->SFE_CC3000_Library->PingTest. 
@@ -158,13 +158,13 @@ Lastly
 * Upload your code
 * Open a serial monitor and listen in at 9600 baudrate (this is how your Arduino will tell you if something broke)
 
-####Pins In use by Shield (Do not use these pins for anything else)
+#### Pins In use by Shield (Do not use these pins for anything else)
 
 * 11, 12, 13 and any other pins you've set above.
 
 One note about the cc3000 is it is a VERY big library. We've had to make a few changes. The sketch no longer supports capabilty query. Most likely that doesn't mean anything to you so don't worry about it.
 
-##Install CC3200
+## Install CC3200
 __WARNING__: CC3200 support is experimental and still in development, some functionality may not yet be supported.
 
 These are instructions for a CC3200 LaunchPad:
@@ -212,7 +212,7 @@ Open the CC3200 sketch through File -> Sketchbook -> microblu_mqtt -> microblu_c
 
 Follow instructions for [configuring your code](#configuring-your-code).
 
-##Install Spark 
+## Install Spark 
 
 These are instructions for a Spark Core:
 * https://www.spark.io
@@ -234,7 +234,7 @@ Add your UUID and TOKEN from before.
 Upload away. You can open the Arduino Serial Terminal at 9600  to see your connection status.
 
 
-##USE
+## USE
 
 Now you can use [Nodeblu Designer](http://app.octoblu.com/design "Nodeblu") or [Node.js](https://www.npmjs.org/package/skynet-serial "Node.js") to command and control your Arduino.
 
